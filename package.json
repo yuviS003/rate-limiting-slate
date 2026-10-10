@@ -7,6 +7,7 @@
   "scripts": {
     "test": "node tools/test-phase1.mjs && node tools/test-phase2.mjs && node tools/test-phase3.mjs && node tools/test-phase4.mjs && node tools/verify-snippets.mjs && node tools/validate-package.mjs",
     "validate": "node tools/validate-package.mjs",
+    "build:publish": "node tools/build-publish-copy.mjs",
     "build:images": "node tools/build.mjs",
     "build:animations": "node tools/d03gif.mjs && node tools/d07gif.mjs"
   },

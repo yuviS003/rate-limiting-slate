@@ -46,6 +46,19 @@ for (const heading of ["# Act I", "# Act II", "# Act III", "# Act IV"]) {
   if (!article.includes(heading)) errors.push(`article section missing: ${heading}`);
 }
 
+const campaignPath = resolve(ROOT, "publish", "linkedin-campaign-calendar.md");
+if (!existsSync(campaignPath)) errors.push("LinkedIn campaign calendar missing");
+else {
+  const campaign = readFileSync(campaignPath, "utf8");
+  for (let i = 1; i <= 9; i++) {
+    if (!campaign.includes(`# Post ${i} —`)) errors.push(`campaign Post ${i} missing`);
+  }
+  const assets = [...campaign.matchAll(/`((?:images|videos)\/[A-Za-z0-9._/-]+)`/g)].map((m) => m[1]);
+  for (const asset of new Set(assets)) {
+    if (!existsSync(resolve(ROOT, asset))) errors.push(`campaign asset missing: ${asset}`);
+  }
+}
+
 const words = (article.replace(/```[\s\S]*?```/g, " ").match(/[A-Za-z0-9][A-Za-z0-9’'/-]*/g) ?? []).length;
 const external = links.filter((l) => /^https?:/i.test(l)).length;
 
@@ -60,4 +73,5 @@ console.log(`external references: ${external}`);
 console.log(`raster assets:       ${rasters.length}, all <= 2000px`);
 console.log("playground:          script parses; 5 activity sections present");
 console.log("videos:              2 present");
+console.log("LinkedIn campaign:   9 posts with existing assets");
 console.log("package validation passed");
