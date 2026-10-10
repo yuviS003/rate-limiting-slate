@@ -62,7 +62,8 @@ Publish the complete LinkedIn Article, then announce it with a normal post. This
 
 ## Part A: publish the Article first
 
-- Source: `publish/linkedin-article.md`
+- Canonical source: `publish/linkedin-article.md`
+- **Copy from:** `publish/linkedin-paste.html` (never paste raw Markdown)
 - Cover: `images/00-cover.png`
 - Title: **The Night One Client Ate the API**
 - Subtitle: **Rate limiting from 15 lines of JavaScript to Redis, Postgres, and adaptive concurrency**

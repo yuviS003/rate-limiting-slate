@@ -46,6 +46,17 @@ for (const heading of ["# Act I", "# Act II", "# Act III", "# Act IV"]) {
   if (!article.includes(heading)) errors.push(`article section missing: ${heading}`);
 }
 
+const pastePath = resolve(ROOT, "publish", "linkedin-paste.html");
+if (!existsSync(pastePath)) errors.push("LinkedIn rich-text copier missing");
+else {
+  const pastePage = readFileSync(pastePath, "utf8");
+  const sections = pastePage.match(/class="copy-card"/g)?.length ?? 0;
+  if (sections !== 6) errors.push(`LinkedIn copier has ${sections} sections instead of 6`);
+  if (!pastePage.includes("ClipboardItem") || !pastePage.includes("ADD IMAGE HERE")) {
+    errors.push("LinkedIn copier controls or image markers missing");
+  }
+}
+
 const campaignPath = resolve(ROOT, "publish", "linkedin-campaign-calendar.md");
 if (!existsSync(campaignPath)) errors.push("LinkedIn campaign calendar missing");
 else {
@@ -72,6 +83,7 @@ console.log(`local links checked: ${links.length - external}`);
 console.log(`external references: ${external}`);
 console.log(`raster assets:       ${rasters.length}, all <= 2000px`);
 console.log("playground:          script parses; 5 activity sections present");
+console.log("LinkedIn copier:     6 rich-text sections present");
 console.log("videos:              2 present");
 console.log("LinkedIn campaign:   9 posts with existing assets");
 console.log("package validation passed");

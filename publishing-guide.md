@@ -32,17 +32,27 @@ If you publish the full folder, keep `images/`, `videos/`, and `code/` beside th
 
 Keep the two GIFs in the long-form web version. If an editor does not preserve animated media, upload the matching MP4 as a native companion post and use the PNG still in the article.
 
-## 3. Copy the article
+## 3. Paste the article into LinkedIn correctly
 
-Canonical source: `rate-limiting-article.md`.
+Canonical source: `rate-limiting-article.md`. **Do not paste that Markdown source directly into LinkedIn.** LinkedIn will show `#`, `##`, and `![image](url)` as ugly text.
 
-Before pasting into a platform editor:
+Use the generated body-only copier instead:
 
-- replace relative playground/code/video links with their public URLs;
-- upload images instead of expecting relative Markdown image paths to resolve;
-- keep source links inline and retain the primary-reference section;
-- preview `<details>` blocks—if the editor strips them, format each as “Pause and predict” followed by a visually separated answer;
-- preserve code formatting with code blocks or screenshots where the editor has weak syntax support.
+- Local: `publish/linkedin-paste.html`
+- After pushing: `https://yuvis003.github.io/rate-limiting-slate/publish/linkedin-paste.html`
+
+Workflow:
+
+1. Enter the LinkedIn title and subtitle in their dedicated fields.
+2. Upload `images/00-cover.png` as the cover.
+3. Open `linkedin-paste.html` in a browser.
+4. Copy and paste its six numbered rich-text sections into LinkedIn, in order.
+5. At each blue `ADD IMAGE HERE` marker, delete the marker and upload the named local image.
+6. If a code block loses formatting, select it and click LinkedIn's code (`</>`) button.
+7. Keep inline source links and the primary-reference section.
+8. Preview desktop and mobile before publishing.
+
+The copier intentionally excludes the duplicate title, subtitle, and cover from the article body. It also converts collapsible answer blocks and tables into editor-safe rich text.
 
 ## 4. Suggested LinkedIn launch post
 

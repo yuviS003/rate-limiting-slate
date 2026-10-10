@@ -1,0 +1,1177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LinkedIn Rich-Text Copier — Rate Limiting</title>
+<style>
+:root{color-scheme:light;--ink:#171717;--muted:#666;--line:#d9d9d9;--blue:#0a66c2;--panel:#f7f8fa;--good:#087f5b}
+*{box-sizing:border-box}body{margin:0;background:#eef1f5;color:var(--ink);font:16px/1.6 Segoe UI,Arial,sans-serif}.shell{width:min(960px,calc(100% - 24px));margin:auto}
+.hero{background:#101827;color:white;padding:34px 0}.hero h1{font-size:34px;margin:0 0 8px}.hero p{color:#bec9db;margin:0}.steps{background:#fff4cf;border:1px solid #ecd477;border-radius:10px;padding:16px 20px;margin:22px 0}.steps h2{margin:0 0 8px;font-size:20px}.steps ol{margin:0;padding-left:22px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}.field{background:white;border:1px solid var(--line);border-radius:10px;padding:14px}.field small{display:block;color:var(--muted);text-transform:uppercase;font-weight:700;letter-spacing:.08em}.field strong{display:block;margin:5px 0 10px}.field button,.copy-section,.copy-all{background:var(--blue);border:0;color:white;border-radius:7px;padding:9px 13px;font-weight:700;cursor:pointer}.copy-all{background:var(--good);font-size:16px;margin-top:14px}.copy-card{background:white;border:1px solid var(--line);border-radius:12px;margin:18px 0 28px;overflow:hidden}.card-head{display:flex;justify-content:space-between;align-items:center;gap:16px;background:var(--panel);border-bottom:1px solid var(--line);padding:14px 18px}.card-head span{font-size:11px;color:var(--blue);font-weight:800;letter-spacing:.12em}.card-head h2{font-size:20px;margin:2px 0}.assets{margin:0;padding:10px 18px;background:#eef6ff;color:#345;font-size:13px;border-bottom:1px solid #cddff1}.article-section{padding:22px 30px}.article-section h2{font-size:27px;margin:32px 0 10px}.article-section h3{font-size:22px;margin:27px 0 9px}.article-section h4{font-size:18px;margin:23px 0 7px}.article-section p{margin:10px 0}.article-section li{margin:4px 0}.article-section blockquote{margin:16px 0;padding:10px 16px;border-left:4px solid var(--blue);background:#f3f7fb}.article-section pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#111827;color:#e5edf8;border-radius:8px;padding:14px;font:13px/1.55 Consolas,monospace}.article-section code:not(pre code){background:#edf0f4;border-radius:4px;padding:2px 5px}.article-section img{display:block;max-width:100%;height:auto;margin:20px auto;border-radius:8px}.article-section table{border-collapse:collapse;width:100%;margin:18px 0}.article-section th,.article-section td{border:1px solid #ccc;padding:8px;text-align:left}.article-section a{color:var(--blue)}.article-section hr{border:0;border-top:1px solid #ddd;margin:28px 0}.status{position:fixed;right:18px;bottom:18px;background:#152238;color:white;padding:10px 14px;border-radius:8px;opacity:0;transform:translateY(8px);transition:.2s}.status.show{opacity:1;transform:none}.warning{color:#8a5600;font-weight:700}.image-marker{border:2px dashed #0a66c2!important;background:#eef6ff!important;color:#083c6c!important;padding:14px!important;text-align:center!important;font-weight:700!important;margin:20px 0!important}.table-cards{border-left:3px solid #777;padding-left:14px}.table-row{margin:12px 0}.table-row strong{display:block}footer{padding:25px 0 50px;color:var(--muted);text-align:center}@media(max-width:650px){.fields{grid-template-columns:1fr}.card-head{align-items:flex-start;flex-direction:column}.article-section{padding:18px}.copy-section{width:100%}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="shell"><h1>LinkedIn Rich-Text Copier</h1><p>This page—not the Markdown file—is what you copy from.</p></div></header>
+<main class="shell">
+<section class="steps">
+<h2>Do this in LinkedIn now</h2>
+<ol>
+<li>Keep the cover, title, and subtitle already entered.</li>
+<li><strong>Delete the broken body</strong> containing <code>#</code>, <code>##</code>, or <code>![...]</code>.</li>
+<li>Copy and paste each of the six sections below, in order.</li>
+<li>Whenever you see a blue <span class="warning">ADD IMAGE HERE</span> marker, delete that marker and upload the named local image.</li>
+<li>Use LinkedIn's code button on any code block that loses its dark formatting.</li>
+</ol>
+<button class="copy-all">Copy entire body (sections are safer)</button>
+</section>
+<div class="fields">
+<div class="field"><small>LinkedIn title field</small><strong>The Night One Client Ate the API</strong><button data-copy="The Night One Client Ate the API">Copy title</button></div>
+<div class="field"><small>LinkedIn subtitle field</small><strong>Rate limiting from 15 lines of JavaScript to Redis, Postgres, and adaptive concurrency</strong><button data-copy="Rate limiting from 15 lines of JavaScript to Redis, Postgres, and adaptive concurrency">Copy subtitle</button></div>
+</div>
+<section class="copy-card" data-section="1">
+    <header class="card-head">
+      <div><span>SECTION 1 OF 6</span><h2>Opening and the cast</h2></div>
+      <button class="copy-section">Copy this section</button>
+    </header>
+    <p class="assets"><strong>Images in this section:</strong> 08-journey.png</p>
+    <article class="article-section"><p><strong>A visual, code-first field guide for frontend developers, backend developers, freshers, and anyone who has ever stared at a <code>429</code> and wondered what the server was actually doing.</strong></p>
+<hr>
+<h3>Cold open: 02:13 AM</h3>
+<p>The API is alive.</p>
+<p>Technically.</p>
+<p>Health checks return <code>200</code>. CPU is at 100%. Database connections are gone. Ordinary users see timeouts. The most confusing graph in the room says traffic is only 8% above normal.</p>
+<p>Then somebody groups requests by customer.</p>
+<p>One integration is sending the same request hundreds of times a second. Its first call timed out, so it retried. The retry timed out, so it retried again. Ten workers are now helping one broken loop ask the same question faster.</p>
+<p>The incident commander asks a wonderfully simple question:</p>
+<blockquote>
+<p>“Why can one customer spend everybody else&#39;s capacity?”</p>
+</blockquote>
+<p>That is the question rate limiting answers.</p>
+<p>Not “how do I return a 429?”</p>
+<p>Not “which npm package should I install?”</p>
+<p>The real question is: <strong>when demand is larger than supply, who gets served, who waits, and who gets told no?</strong></p>
+<p>This article builds that answer four times:</p>
+<ol>
+<li>with bare JavaScript—no Redis, no database, no package;</li>
+<li>with Redis—one shared decision across many Node processes;</li>
+<li>with Redis plus Postgres—fast operational quotas and durable, idempotent settlement;</li>
+<li>beyond requests per second—concurrency, weighted cost, adaptive limits, and load shedding.</li>
+</ol>
+<p>Every diagram here is original. The core teaching paths in the companion files were executed against deterministic tests; the package clearly separates those demonstrations from the additional integration and fault tests a production system still needs. Where we visit Stripe, Cloudflare, Shopify, GitHub, AWS, Google, Redis, OpenAI, and Netflix, the links go to their own engineering material or documentation.</p>
+<blockquote>
+<p><strong>Interactive companion:</strong> open <a href="https://yuvis003.github.io/rate-limiting-slate/rate-limiting-playground.html"><code>rate-limiting-playground.html</code></a> directly in a browser. Send traffic, switch algorithms, break a window boundary, solve architecture scenarios, and take the quiz. It has no dependencies and needs no server.</p>
+</blockquote>
+<hr>
+<h2>The cast</h2>
+<p>Before the first act, meet the five characters. Most rate-limiting confusion comes from asking one character to perform another character&#39;s job.</p>
+<h4>The caller</h4>
+<p>A user, API key, tenant, device, IP address, service account, or model deployment. The limiter needs a key that represents whichever identity receives the budget.</p>
+<h4>The limiter</h4>
+<p>The decision function:</p>
+<pre><code class="language-txt">(identity, action, cost, time, state) → allow | reject | wait
+</code></pre>
+<h4>The state</h4>
+<p>A counter, a list of timestamps, a token balance, or one virtual timestamp. In Act I it lives in a JavaScript <code>Map</code>. In Act II it moves to Redis.</p>
+<h4>The protected resource</h4>
+<p>CPU, workers, database connections, a third-party API, LLM tokens, money, or simple fairness between customers.</p>
+<h4>The policy</h4>
+<p>“100 requests per minute” is only one kind. A real policy might be:</p>
+<pre><code class="language-txt">Free user:       2 requests/sec, burst 10, 10,000 units/month
+Pro user:       20 requests/sec, burst 100, 1,000,000 units/month
+PDF export:      3 requests in flight per customer
+Critical write: reserved capacity, never shed before analytics reads
+</code></pre>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/08-journey.png" alt="The road from bare code to production"></p>
+<p>The rule for this journey is simple: <strong>do not add the next dependency until you can name the failure it fixes.</strong></p>
+<hr>
+</article>
+  </section>
+<section class="copy-card" data-section="2">
+    <header class="card-head">
+      <div><span>SECTION 2 OF 6</span><h2>Act I — Bare JavaScript</h2></div>
+      <button class="copy-section">Copy this section</button>
+    </header>
+    <p class="assets"><strong>Images in this section:</strong> 01-why-rate-limiting.png, 02-fixed-window.png, 03-token-bucket.gif, 06-cheatsheet.png</p>
+    <article class="article-section"><h2>Act I — The Naked Counter</h2>
+<h3>Scene 1: the nightclub door</h3>
+<p>Imagine a club that admits 100 people per minute.</p>
+<p>A bouncer stands at the door with a clicker. Clicks 1 to 100 enter. Click 101 waits outside.</p>
+<p>That gives us the beginner definition:</p>
+<blockquote>
+<p>A rate limiter caps how often an identity may perform an action during a period.</p>
+</blockquote>
+<p>But the analogy gets more useful when we ask what the bouncer is protecting.</p>
+<ul>
+<li><strong>Safety:</strong> the room physically holds 100 people.</li>
+<li><strong>Fairness:</strong> one bus party should not fill every seat.</li>
+<li><strong>Cost:</strong> perhaps every admitted guest costs the host money.</li>
+<li><strong>Abuse:</strong> perhaps one guest keeps leaving and re-entering to disrupt the door.</li>
+</ul>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/01-why-rate-limiting.png" alt="Why rate limiting exists"></p>
+<p>That is why rate limiting exists in production. Stripe describes the same classes of failure: one customer&#39;s traffic spike, a broken script, low-priority traffic crowding out critical calls, or a system already in trouble that must preserve its most important work (<a href="https://stripe.com/blog/rate-limiters">Stripe Engineering</a>).</p>
+<h3>Scene 2: five words we will keep separate</h3>
+<p>Industry vocabulary overlaps—“throttle,” for example, sometimes means delay and sometimes rejection. In this guide, each term names a different <strong>dimension, scope, or action</strong> so the architecture stays clear.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>The question it answers</th>
+<th>Typical response</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Rate limit</strong></td>
+<td>Has this caller done too much in a time interval?</td>
+<td>Reject with <code>429</code></td>
+</tr>
+<tr>
+<td><strong>Quota</strong></td>
+<td>Has this caller consumed its daily/monthly allocation?</td>
+<td>Reject, bill overage, or ask for an upgrade</td>
+</tr>
+<tr>
+<td><strong>Throttle</strong></td>
+<td>Can I slow or queue this work instead of rejecting it?</td>
+<td>Delay or process at a fixed pace</td>
+</tr>
+<tr>
+<td><strong>Concurrency limit</strong></td>
+<td>How much work from this caller is alive right now?</td>
+<td>Reject or queue until a slot opens</td>
+</tr>
+<tr>
+<td><strong>Load shedder</strong></td>
+<td>Is the whole system in danger regardless of caller?</td>
+<td>Drop low-priority work, often with <code>503</code></td>
+</tr>
+</tbody></table>
+<p>A customer can be below its request rate but above its monthly quota. A service can be below both and still collapse because 20 slow requests hold 20 database connections. During an incident, a perfectly polite caller may still be shed because the whole fleet is sick.</p>
+<p>One counter cannot answer all of those questions.</p>
+<hr>
+<h3>Scene 3: fixed window—the twelve-line hero</h3>
+<p>The first implementation needs one <code>Map</code> and no package. The excerpt focuses on the algorithm; the companion file validates positive, finite configuration before creating state:</p>
+<pre><code class="language-js">function createFixedWindow({ limit = 100, windowMs = 60_000 } = {}) {
+  const state = new Map(); // key -&gt; { window, count }
+
+  return function check(key, now = Date.now()) {
+    const window = Math.floor(now / windowMs);
+    const entry = state.get(key);
+
+    if (!entry || entry.window !== window) {
+      state.set(key, { window, count: 1 });
+      return { allowed: true, remaining: limit - 1 };
+    }
+
+    entry.count += 1;
+    return {
+      allowed: entry.count &lt;= limit,
+      remaining: Math.max(0, limit - entry.count),
+    };
+  };
+}
+</code></pre>
+<p>The key idea is this line:</p>
+<pre><code class="language-js">Math.floor(now / windowMs)
+</code></pre>
+<p>It turns time into numbered boxes. Every timestamp between 12:00:00 and 12:00:59 belongs to one box. At 12:01:00, the box number changes and the counter starts over.</p>
+<h4>Pause and predict</h4>
+<p>The limit is 100 per minute.</p>
+<ul>
+<li>The caller sends 100 requests at <code>12:00:59</code>.</li>
+<li>The caller sends 100 more at <code>12:01:00</code>.</li>
+</ul>
+<p>How many pass?</p>
+<blockquote>
+<p><strong>Answer — reveal after making your prediction</strong></p>
+<p>All 200. Each set belongs to a different valid window. The server absorbs roughly twice its intended limit in about one second.</p>
+</blockquote>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/02-fixed-window.png" alt="The fixed-window boundary problem"></p>
+<p>Fixed window is not “bad.” It is cheap, understandable, and often good enough for coarse abuse protection. The lesson is to know its burst shape. Never set a fixed-window limit equal to the absolute traffic your dependency can survive, because the boundary can deliver twice that.</p>
+<hr>
+<h3>Scene 4: sliding window—the camera starts moving</h3>
+<p>A true sliding-window log stores one timestamp per accepted request:</p>
+<pre><code class="language-js">function createSlidingWindowLog({ limit = 100, windowMs = 60_000 } = {}) {
+  const state = new Map();
+
+  return function check(key, now = Date.now()) {
+    const cutoff = now - windowMs;
+    const log = (state.get(key) ?? []).filter(t =&gt; t &gt; cutoff);
+
+    if (log.length &gt;= limit) {
+      state.set(key, log);
+      return { allowed: false, retryAfterMs: log[0] - cutoff };
+    }
+
+    log.push(now);
+    state.set(key, log);
+    return { allowed: true, remaining: limit - log.length };
+  };
+}
+</code></pre>
+<p>There is no clock edge to exploit. At 12:01:00, the limiter still sees requests from 12:00:59 because they are inside the trailing minute.</p>
+<p>The trade-off is written directly into the data structure: one timestamp per request. A limit of 100 means at most 100 entries per key. A limit of one million means… you should probably not put one million timestamps per key in memory.</p>
+<h4>Cloudflare&#39;s two-integer trick</h4>
+<p>Cloudflare published a practical approximation while describing rate limiting across millions of domains: keep the current window count and the previous window count, then weight the previous count by how much of it still overlaps the trailing interval (<a href="https://blog.cloudflare.com/counting-things-a-lot-of-different-things">Cloudflare Engineering</a>).</p>
+<pre><code class="language-txt">estimated count =
+    previous count × (1 - fraction through current window)
+  + current count
+</code></pre>
+<p>At 25% into a new minute, 75% of the previous minute still overlaps. If the previous count was 100 and the current count is 10, the estimate is 85.</p>
+<p>You traded exactness for constant memory: two counts instead of a timestamp list.</p>
+<hr>
+<h3>Scene 5: token bucket—the default with a memory of silence</h3>
+<p>Now replace the clicker with a bucket.</p>
+<ul>
+<li>It holds at most 10 tokens.</li>
+<li>It receives 2 new tokens every second.</li>
+<li>A request spends one token.</li>
+<li>No token means no service.</li>
+</ul>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/03-token-bucket.gif" alt="Animated token bucket"></p>
+<p>🎬 Native clip: <a href="https://yuvis003.github.io/rate-limiting-slate/videos/token-bucket.mp4"><code>videos/token-bucket.mp4</code></a></p>
+<p>Two numbers now describe two different promises:</p>
+<ul>
+<li><strong>Refill rate</strong> is the sustainable average: 2 tokens/sec means 2 requests/sec over time.</li>
+<li><strong>Capacity</strong> is the tolerated burst: a quiet caller can save at most 10 tokens, then spend all 10 immediately.</li>
+</ul>
+<p>That separation fits how applications behave. Opening one React screen may trigger six API calls together, followed by silence. A fixed “2 requests every second” rule rejects ordinary page loading. A token bucket lets the small burst through but still prevents a caller from sustaining more than 2/sec.</p>
+<p>You do not need a timer dripping tokens in the background. Refill lazily when a request arrives:</p>
+<pre><code class="language-js">function createTokenBucket({ capacity = 10, refillPerSec = 2 } = {}) {
+  const state = new Map(); // key -&gt; { tokens, last }
+
+  return function check(key, now = Date.now(), cost = 1) {
+    if (!Number.isFinite(now) || !Number.isFinite(cost) || cost &lt;= 0) {
+      throw new RangeError(&#39;now and cost must be valid&#39;);
+    }
+    if (cost &gt; capacity) {
+      return { allowed: false, reason: &#39;cost_exceeds_capacity&#39;, retryAfterMs: null };
+    }
+
+    const b = state.get(key) ?? { tokens: capacity, last: now };
+    const effectiveNow = Math.max(now, b.last); // never persist a regressed clock
+    const elapsedSec = (effectiveNow - b.last) / 1000;
+    b.tokens = Math.min(capacity, b.tokens + elapsedSec * refillPerSec);
+    b.last = effectiveNow;
+
+    const allowed = b.tokens &gt;= cost;
+    if (allowed) b.tokens -= cost;
+    state.set(key, b);
+
+    return {
+      allowed,
+      tokens: b.tokens,
+      retryAfterMs: allowed
+        ? 0
+        : Math.ceil(((cost - b.tokens) / refillPerSec) * 1000),
+    };
+  };
+}
+</code></pre>
+<p>The formula is the algorithm:</p>
+<pre><code class="language-txt">new balance = min(capacity, old balance + elapsed seconds × refill rate)
+</code></pre>
+<p>The <code>min</code> matters. Without it, a user who was idle for a week could bank a week of tokens and release them in one burst.</p>
+<p>The optional <code>cost</code> parameter is our first clue that “one request” may not be the right unit. We will return to it in Act IV.</p>
+<h4>Pause and predict</h4>
+<p>Capacity is 10 and refill is 2/sec. A full bucket receives 12 requests at once.</p>
+<blockquote>
+<p><strong>Answer — reveal after making your prediction</strong></p>
+<p>Ten pass. Two are rejected. The first rejected request should wait about 500ms for one token.</p>
+</blockquote>
+<hr>
+<h3>Scene 6: leaky bucket—the name with two meanings</h3>
+<p>In the classic traffic-shaping version, requests enter a queue and leave at a constant rate. A burst becomes waiting time instead of a burst hitting the downstream service.</p>
+<pre><code class="language-txt">burst in:   ||||||||||
+steady out: |  |  |  |  |  |
+</code></pre>
+<p>That is useful when the receiver needs smooth traffic and latency is acceptable. It is dangerous when the queue can grow without a bound; then your “limiter” is only moving the outage into memory.</p>
+<p>The vocabulary is messy in the real world. Some API documentation uses “leaky bucket” for a budget that restores continuously, which behaves like the mirror image of a token bucket. Shopify uses that bucket model and lets short bursts through while restoring capacity over time (<a href="https://shopify.dev/docs/api/usage/limits">Shopify API limits</a>). When reading documentation, inspect the behavior rather than trusting the label.</p>
+<hr>
+<h3>Scene 7: GCRA—the one-timestamp magician</h3>
+<p>The Generic Cell Rate Algorithm came from network scheduling. Instead of storing tokens or timestamps, it stores one number: the <strong>theoretical arrival time</strong> (<code>TAT</code>) of the next request.</p>
+<p>For 10 requests/sec, requests should be spaced 100ms apart. A successful request moves the theoretical schedule 100ms into the future. Burst tolerance says how far ahead of real time the caller may run.</p>
+<pre><code class="language-js">function createGCRA({ limit = 10, periodMs = 1000, burst = 5 } = {}) {
+  const state = new Map(); // key -&gt; one timestamp
+  const interval = periodMs / limit;
+  const tolerance = interval * burst;
+
+  return function check(key, now = Date.now(), cost = 1) {
+    if (!Number.isFinite(now) || !Number.isFinite(cost) || cost &lt;= 0) {
+      throw new RangeError(&#39;now and cost must be valid&#39;);
+    }
+    if (cost &gt; burst) {
+      return { allowed: false, reason: &#39;cost_exceeds_burst&#39;, retryAfterMs: null };
+    }
+
+    const tat = Math.max(state.get(key) ?? now, now);
+    const next = tat + interval * cost;
+    const allowAt = next - tolerance;
+
+    if (now &lt; allowAt) {
+      return { allowed: false, retryAfterMs: Math.ceil(allowAt - now) };
+    }
+
+    state.set(key, next);
+    return { allowed: true, retryAfterMs: 0 };
+  };
+}
+</code></pre>
+<p>GCRA gives admissible requests smooth rolling behavior, bounded bursts, exact retry timing, and one value per key. A weighted request larger than the configured burst is terminally impossible and should return <code>cost_exceeds_burst</code>, not a retry time that repeats forever. That compact state is why systems such as <code>redis-cell</code> implement GCRA as a single Redis operation (<a href="https://brandur.org/rate-limiting">Brandur Leach&#39;s GCRA explanation</a>, <a href="https://redis.io/blog/redis-cell-rate-limiting-redis-module/">Redis&#39;s redis-cell overview</a>).</p>
+<p>You do not need GCRA on your first endpoint. You should know why it exists.</p>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/06-cheatsheet.png" alt="Four rate-limiting algorithms compared"></p>
+<h4>Act I checkpoint</h4>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>First choice</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A cheap coarse cap</td>
+<td>Fixed window</td>
+</tr>
+<tr>
+<td>Exact trailing-window fairness</td>
+<td>Sliding log</td>
+</tr>
+<tr>
+<td>Constant memory approximation</td>
+<td>Sliding counter</td>
+</tr>
+<tr>
+<td>Sustainable rate plus a friendly burst</td>
+<td>Token bucket</td>
+</tr>
+<tr>
+<td>Flat output through a queue</td>
+<td>Leaky bucket</td>
+</tr>
+<tr>
+<td>Smooth rolling enforcement with tiny state</td>
+<td>GCRA</td>
+</tr>
+</tbody></table>
+<p>The full, executable versions of all six are in <a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase1-bare/limiters.mjs"><code>code/phase1-bare/limiters.mjs</code></a>.</p>
+<hr>
+<h3>The Act I post-credits scene: the code works, but the process does not</h3>
+<p>Our <code>Map</code> implementations have four production problems.</p>
+<h4>1. State grows forever</h4>
+<p>Every new key creates an entry. If attackers invent keys, memory becomes the target. Add expiry and a sweeper, use an LRU, or move state to a store with TTL.</p>
+<p>This is a <strong>cardinality attack</strong>: the attacker does not need to exceed a per-key limit if they can create unlimited keys.</p>
+<h4>2. Wall clocks can jump</h4>
+<p><code>Date.now()</code> may move when a machine&#39;s clock is corrected. For elapsed time inside one process, a monotonic clock such as <code>performance.now()</code> is safer. Across processes, synchronize clocks or choose a central time source deliberately.</p>
+<h4>3. The identity may be wrong</h4>
+<p>IP address is a fallback, not a person.</p>
+<ul>
+<li>An office, university, or mobile carrier may put many users behind one NAT address.</li>
+<li>An attacker can rotate proxies.</li>
+<li>IPv6 gives clients ranges, so raw addresses can create fresh budgets. Popular Node middleware exposes helpers that group IPv6 addresses by subnet for this reason.</li>
+<li>If Express is behind a proxy, configure <code>trust proxy</code> correctly or <code>req.ip</code> may be the load balancer—or a spoofable header.</li>
+</ul>
+<p>Prefer an authenticated customer or API-key ID. Compose keys around the policy you intend:</p>
+<pre><code class="language-txt">rl:{tenant-123}:search
+rl:{tenant-123}:pdf-export
+rl:{api-key-abc}:model:gpt-x
+</code></pre>
+<h4>4. A second process creates a second truth</h4>
+<p>That is our cliffhanger.</p>
+<hr>
+</article>
+  </section>
+<section class="copy-card" data-section="3">
+    <header class="card-head">
+      <div><span>SECTION 3 OF 6</span><h2>Act II — Shared Redis</h2></div>
+      <button class="copy-section">Copy this section</button>
+    </header>
+    <p class="assets"><strong>Images in this section:</strong> 04-memory-vs-redis.png, 07-race-condition.gif</p>
+    <article class="article-section"><h2>Act II — One Shared Brain</h2>
+<h3>Scene 1: the deploy that multiplies the limit</h3>
+<p>Your laptop runs one Node process. The <code>Map</code> says a customer has used 80 of 100 requests.</p>
+<p>Production runs three pods. Each pod has a different <code>Map</code> and each grants 100.</p>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/04-memory-vs-redis.png" alt="In-process state versus shared Redis"></p>
+<p>The code did not become wrong when you deployed it. Its <strong>scope</strong> became wrong.</p>
+<p>Move ephemeral limiter state to Redis and every process asks one shared authority.</p>
+<p>Redis is a natural fit because it gives us:</p>
+<ul>
+<li>atomic primitives such as <code>INCR</code>;</li>
+<li>key expiry;</li>
+<li>sorted sets for sliding logs;</li>
+<li>hashes for token state;</li>
+<li>Lua scripts that turn a multi-step decision into one atomic operation.</li>
+</ul>
+<p>Redis&#39;s own rate-limiting guides use the same model: shared state, atomic scripts, and TTL (<a href="https://redis.io/docs/latest/develop/use-cases/rate-limiter/">Redis rate limiter documentation</a>, <a href="https://redis.io/docs/latest/develop/use-cases/rate-limiter/nodejs/">Redis Node token-bucket guide</a>).</p>
+<hr>
+<h3>Scene 2: “Redis is single-threaded” is not the end of the story</h3>
+<p>This code is still wrong:</p>
+<pre><code class="language-js">const current = Number(await redis.get(key) ?? 0); // round trip 1
+if (current &gt;= limit) return false;                // decision in Node
+await redis.set(key, current + 1);                 // round trip 2
+return true;
+</code></pre>
+<p>Suppose the count is 99 and the cap is 100.</p>
+<ol>
+<li>Pod A reads 99.</li>
+<li>Pod B reads 99 before A writes.</li>
+<li>Both decide that one slot remains.</li>
+<li>Both serve a request.</li>
+<li>Both write 100.</li>
+</ol>
+<p>Two requests were served against one slot, and the final counter says 100. Your metrics cannot even reveal the overshoot.</p>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/07-race-condition.gif" alt="Animated Redis race: check then write versus one atomic script"></p>
+<p>🎬 Native clip: <a href="https://yuvis003.github.io/rate-limiting-slate/videos/redis-race.mp4"><code>videos/redis-race.mp4</code></a></p>
+<p>“Each Redis command is atomic” does not mean “my workflow of three commands is atomic.” The fix is to move read → decide → write into one Lua script. Redis runs that script with no other command interleaved.</p>
+<h4>An atomic fixed-window script</h4>
+<p>The key already contains the numbered clock window. Node passes the milliseconds left until the real boundary as <code>ARGV[2]</code>:</p>
+<pre><code class="language-lua">local limit = tonumber(ARGV[1])
+local ttl   = tonumber(ARGV[2])
+
+-- Validate before writing: script errors do not roll back earlier writes.
+if limit == nil or limit &lt;= 0 or limit ~= math.floor(limit)
+   or ttl == nil or ttl &lt;= 0 or ttl ~= math.floor(ttl) then
+  return { -2, 0, 0 }
+end
+
+local count = redis.call(&#39;INCR&#39;, KEYS[1])
+if count == 1 then
+  redis.call(&#39;PEXPIRE&#39;, KEYS[1], ttl)
+end
+
+local remaining_ttl = redis.call(&#39;PTTL&#39;, KEYS[1])
+if count &gt; limit then
+  return { 0, 0, remaining_ttl }
+end
+return { 1, limit - count, remaining_ttl }
+</code></pre>
+<p><code>INCR</code> and <code>PEXPIRE</code> belong in the same script. If your process dies after an <code>INCR</code> but before a separate <code>EXPIRE</code>, the key can become immortal and that user can remain blocked forever.</p>
+<p>The complete sliding-log, token-bucket, and GCRA scripts are in <a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase2-redis/scripts.mjs"><code>code/phase2-redis/scripts.mjs</code></a>. They run through the wrapper in <a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase2-redis/limiter.mjs"><code>code/phase2-redis/limiter.mjs</code></a>.</p>
+<h4>Four details hidden inside good Lua</h4>
+<p><strong>Return fractional values as strings.</strong> Redis converts Lua numeric replies to integers. A token balance of <code>0.5</code> can arrive as <code>0</code> unless the script returns <code>tostring(tokens)</code>.</p>
+<p><strong>Expire every state key.</strong> The TTL should be long enough that an idle bucket can refill fully, then disappear. Pass Redis expiry durations as positive integers—round a fractional clock-boundary remainder upward before the script runs—and validate again in Lua before the first mutation. Without TTL, identity cardinality turns Redis into an unbounded user registry.</p>
+<p><strong>Choose your clock.</strong> Passing app time in <code>ARGV</code> keeps scripts deterministic and avoids some replication concerns, but your app hosts need synchronized clocks. Calling Redis <code>TIME</code> centralizes the clock but couples the algorithm to Redis time semantics. Pick; do not drift into a choice accidentally.</p>
+<p><strong>Keep multi-key scripts in one Redis Cluster slot.</strong> A script that touches <code>used</code>, <code>pending-units</code>, and <code>pending-requests</code> will fail in cluster mode if those keys hash to different slots. Put the same hash tag inside braces in all of them:</p>
+<pre><code class="language-txt">quota:{tenant-123:2026-10}:used
+quota:{tenant-123:2026-10}:pending:units
+quota:{tenant-123:2026-10}:pending:requests
+</code></pre>
+<p>Redis hashes only the text inside <code>{...}</code>, so the three keys travel together. The Phase III implementation does this and tests it.</p>
+<hr>
+<h3>Scene 3: the Redis-only implementation shape</h3>
+<pre><code class="language-js">const limiter = createRedisLimiter({
+  eval: (script, keys, args) =&gt;
+    redis.eval(script, { keys, arguments: args.map(String) }),
+  prefix: &#39;rl:&#39;,
+  failOpen: true,
+  onError: err =&gt; metrics.increment(&#39;rate_limiter.redis_error&#39;),
+});
+
+app.use(&#39;/api&#39;, rateLimitMiddleware(limiter, {
+  keyOf: req =&gt; req.user?.customerId ?? ipKeyGenerator(req.ip),
+  capacity: 20,
+  refillPerSec: 5,
+  costOf: req =&gt; req.path === &#39;/search&#39; ? 5 : 1,
+}));
+</code></pre>
+<p>Now one budget applies across every pod. The wrapper is deliberately readable, not a claim that one file completes Redis operations.</p>
+<h4>The Redis production checklist</h4>
+<ul>
+<li><strong>Use <code>EVALSHA</code> or Redis Functions</strong>, not full script text on every request; handle script cache misses after failover.</li>
+<li><strong>Bound Redis latency</strong> with connection and command timeouts. A limiter that waits forever has become the outage.</li>
+<li><strong>Choose persistence and eviction deliberately.</strong> Disposable request counters can tolerate loss; quota state often requires AOF/replication and <code>noeviction</code>.</li>
+<li><strong>Understand asynchronous failover.</strong> A successful primary write may not have reached a replica before promotion. <code>WAIT</code> can reduce that window by waiting for replicas, at the cost of latency; it is not a replacement for a durable financial ledger.</li>
+<li><strong>Keep scripts short.</strong> Redis executes Lua atomically, so a long script blocks other work.</li>
+<li><strong>Watch hot keys.</strong> One global key serializes the world on one shard. Prefer per-tenant/per-route keys and separate fleet-level controls.</li>
+<li><strong>Test a real Redis Cluster.</strong> A Lua VM proves algorithm branches; it does not prove failover, slot routing, persistence, eviction, or cluster-wide scans.</li>
+</ul>
+<h4>Fail open or fail closed?</h4>
+<p>When Redis is unavailable, you have to choose another failure mode.</p>
+<ul>
+<li><strong>Fail open:</strong> serve the request. Good for general API availability when the limiter is protection, not authorization.</li>
+<li><strong>Fail closed:</strong> reject the request. Good when serving it could create an unacceptable security or financial event—password guessing, an LLM cost cap, or a hard contractual quota.</li>
+<li><strong>Degrade locally:</strong> use a smaller emergency in-process limit until Redis recovers. This preserves some protection while admitting that the limit is no longer globally exact.</li>
+</ul>
+<p>Stripe describes catching limiter failures so limiter bugs do not take down the API, adding kill switches, observing decisions, and dark-launching before enforcement (<a href="https://stripe.com/blog/rate-limiters">Stripe Engineering</a>). That is a sensible default for a broad request limiter. It is not a universal answer for every endpoint.</p>
+<hr>
+<h3>Scene 4: send an actionable rejection</h3>
+<p><code>429 Too Many Requests</code> was defined by <a href="https://datatracker.ietf.org/doc/html/rfc6585">RFC 6585</a>. A useful, cache-resistant rejection includes enough information for a cooperative client to recover:</p>
+<pre><code class="language-http">HTTP/1.1 429 Too Many Requests
+Retry-After: 12
+Cache-Control: private, no-store
+Content-Type: application/json
+
+{
+  &quot;error&quot;: &quot;rate_limited&quot;,
+  &quot;message&quot;: &quot;Request rejected by the rate policy.&quot;,
+  &quot;retry_after_ms&quot;: 12000
+}
+</code></pre>
+<p><code>Retry-After</code> is standardized and may contain seconds or an HTTP date. The richer <code>RateLimit</code>/<code>RateLimit-Policy</code> fields are still evolving through the IETF HTTPAPI process, and draft grammar has changed. If you emit them, pin one draft version across server, gateway, SDK, and documentation instead of copying a header from a different draft (<a href="https://www.ietf.org/archive/id/draft-ietf-httpapi-ratelimit-headers-11.html">current IETF draft</a>).</p>
+<p>Status codes describe the kind of decision, not an unbreakable scope law:</p>
+<ul>
+<li><code>429</code>: a configured rate policy rejected this request; the counting scope is defined by that policy.</li>
+<li><code>503</code>: the service is temporarily unavailable, commonly used when global overload shedding is the reason.</li>
+<li><code>403</code>: the action is forbidden, not temporarily over budget.</li>
+<li><code>402</code> is not a universal “quota exhausted” contract; document your own commercial error clearly.</li>
+</ul>
+<h4>Act II checkpoint</h4>
+<p>Redis solved distribution and atomicity. It did <strong>not</strong> make the counter durable business truth.</p>
+<p>If Redis restarts and every request counter resets, that is usually acceptable. If Redis restarts and a customer receives a second free monthly allowance, it is not.</p>
+<p>Cut to Act III.</p>
+<hr>
+</article>
+  </section>
+<section class="copy-card" data-section="4">
+    <header class="card-head">
+      <div><span>SECTION 4 OF 6</span><h2>Act III — Redis and Postgres</h2></div>
+      <button class="copy-section">Copy this section</button>
+    </header>
+    <p class="assets"><strong>Images in this section:</strong> 09-redis-postgres.png</p>
+    <article class="article-section"><h2>Act III — Speed and Truth</h2>
+<h3>Scene 1: a rate limit and a quota walk into a database</h3>
+<p>A rate limit protects a moment:</p>
+<pre><code class="language-txt">Can customer A send this request right now?
+</code></pre>
+<p>A quota protects a period or contract:</p>
+<pre><code class="language-txt">Has customer A consumed its 1,000,000 units this month?
+</code></pre>
+<p>The first value changes on every request and can be reconstructed. The second may appear on an invoice and must survive a cache wipe.</p>
+<p>The architecture is therefore not “Redis versus database.” It is “what belongs in each?”</p>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/09-redis-postgres.png" alt="Redis for speed, Postgres for truth"></p>
+<h4>Postgres owns</h4>
+<ul>
+<li>plans and customer overrides;</li>
+<li>suspension and entitlement state;</li>
+<li>durable usage per billing period;</li>
+<li>sampled/audited decisions you may need to explain later.</li>
+</ul>
+<h4>Redis owns</h4>
+<ul>
+<li>token balances and virtual timestamps;</li>
+<li>cached plan policy;</li>
+<li>the hot month-to-date counter;</li>
+<li>the unflushed usage delta.</li>
+</ul>
+<h4>Do not synchronously update one aggregate row per request</h4>
+<p>At 1,000 requests/sec, updating one shared usage aggregate per request creates 2.6 billion write operations in a 30-day month, plus severe row contention, to recover a handful of totals. An append-only idempotent event per billable operation can be valid when exact accounting demands it; a synchronous hot-row increment usually is not.</p>
+<p>Aggregate in Redis, rotate a UUID-tagged batch, then settle it idempotently:</p>
+<pre><code class="language-sql">BEGIN;
+
+WITH accepted AS (
+  INSERT INTO usage_flushes
+    (flush_id, customer_id, period, units, requests)
+  VALUES ($1, $2, $3, $4, $5)
+  ON CONFLICT (flush_id) DO NOTHING
+  RETURNING 1
+)
+INSERT INTO usage_periods (customer_id, period, units, requests)
+SELECT $2, $3, $4, $5 FROM accepted
+ON CONFLICT (customer_id, period) DO UPDATE
+SET units      = usage_periods.units    + EXCLUDED.units,
+    requests   = usage_periods.requests + EXCLUDED.requests,
+    updated_at = now();
+
+COMMIT;
+</code></pre>
+<p>If the same flush UUID is retried, <code>accepted</code> is empty and the aggregate does not move twice.</p>
+<p>The full schema is in <a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase3-db-redis/schema.sql"><code>code/phase3-db-redis/schema.sql</code></a>.</p>
+<hr>
+<h3>Scene 2: keep the database off the hot path</h3>
+<p>A naive hybrid design reads Postgres before every request:</p>
+<pre><code class="language-txt">request → SELECT plan → SELECT usage → Redis → handler
+</code></pre>
+<p>That protects the database by placing the database inside every limiting decision. It defeats the point.</p>
+<p>The verified companion design uses two cold-start handshakes.</p>
+<h4>Policy cache</h4>
+<ol>
+<li>Look for <code>plan:{customer}</code> in Redis.</li>
+<li>On a miss, read Postgres once.</li>
+<li>Cache the resolved policy for 60 seconds.</li>
+<li>Invalidate it immediately when a plan changes.</li>
+</ol>
+<p>A popular tenant can cause a cache-miss stampede: hundreds of requests all miss together and query Postgres. Collapse concurrent misses with single-flight/locking, briefly negative-cache unknown customers, and version policies so stale invalidation messages cannot overwrite a newer plan. A TTL is the safety net; an event or explicit invalidation is the fast path.</p>
+<h4>Settled quota seed</h4>
+<ol>
+<li>Call the quota Lua script with a sentinel seed of <code>-1</code>.</li>
+<li>If the running Redis key exists, the script decides immediately: zero database reads.</li>
+<li>If the key is cold, the script returns <code>-1</code> without consuming anything.</li>
+<li>Node reads durable usage from Postgres and retries the same atomic script with that seed.</li>
+<li>If several pods cold-start together, only the first script seeds. The others see the key and continue from it.</li>
+</ol>
+<p>Why not call <code>EXISTS</code>, then read Postgres on a miss? Because the key can expire between <code>EXISTS</code> and the quota script. Making the script declare “I am cold” closes that gap.</p>
+<p>The complete implementation is <a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase3-db-redis/quota-service.mjs"><code>code/phase3-db-redis/quota-service.mjs</code></a>.</p>
+<hr>
+<h3>Scene 3: two gates, in the right order</h3>
+<pre><code class="language-txt">policy / suspension
+        ↓
+per-second rate limit
+        ↓
+monthly quota reservation
+        ↓
+handler
+</code></pre>
+<p>The order carries semantics.</p>
+<ul>
+<li>A suspended customer should not consume a token.</li>
+<li>A request rejected by the fast rate limit should not consume monthly quota.</li>
+<li>A request rejected by quota should not reach the expensive handler.</li>
+</ul>
+<p>In the tests, a free plan with burst capacity 5 and monthly quota 10 receives a burst of 12. Exactly 5 reach the quota gate. The other 7 receive <code>rate_limited</code> and consume zero monthly units.</p>
+<h4>Keep units and requests separate</h4>
+<p>One request may cost 15 units. Store both:</p>
+<pre><code class="language-txt">units:    15
+requests:  1
+</code></pre>
+<p>Do not increment “requests” by cost. That sounds obvious until one shared pending counter is reused for both and your analytics report fifteen calls that never happened. The companion implementation maintains separate write-behind deltas.</p>
+<hr>
+<h3>Scene 4: write-behind needs an identity</h3>
+<p>Deleting a pending counter and then writing it to Postgres is not enough. A worker can die after deletion but before the database write, losing the batch. It can also observe an ambiguous database result and apply the same delta twice.</p>
+<p>The companion implementation uses an idempotent processing-batch protocol:</p>
+<ol>
+<li>A Lua script atomically rotates <code>pending:units</code> and <code>pending:requests</code> into an immutable processing hash.</li>
+<li>The hash receives a UUID and keeps its original customer <strong>and period</strong>.</li>
+<li>New requests immediately fill fresh pending counters.</li>
+<li>One Postgres transaction inserts the UUID into <code>usage_flushes</code> and increments <code>usage_periods</code> only if that UUID was new.</li>
+<li>Redis deletes the processing hash only after a confirmed commit.</li>
+</ol>
+<p>The rotation script validates every argument before writing, refuses an already-existing processing ID, creates and expires the recoverable hash <strong>before</strong> deleting pending counters, and lets the caller generate another UUID on collision. That ordering is what makes “immutable batch” true rather than a label.</p>
+<p>If a worker dies before the commit, the processing hash remains discoverable. If it dies after the commit but before Redis cleanup, the next worker replays the same UUID; Postgres recognizes it and does not add the batch twice.</p>
+<p>The flusher scans outstanding periods rather than only “this month.” An October batch discovered at 00:00:02 in November is still written to October. In Redis Cluster, that scan must iterate every primary; production code must not use the blocking <code>KEYS</code> command.</p>
+<p>The demo uses UTC calendar months. Real billing may use customer-specific anchors, grace windows for late events, period-closing watermarks, refunds, and manual adjustments. Treat the period as a versioned billing-domain value—not as <code>new Date().slice(0, 7)</code> scattered through request handlers.</p>
+<p>This gives the write-behind path retry safety <strong>as long as Redis still has the processing record</strong>. It does not make Redis a durable billing system.</p>
+<hr>
+<h3>Scene 5: name the guarantee before selling the quota</h3>
+<p>The Phase III design is a <strong>bounded-loss operational quota</strong>:</p>
+<ul>
+<li>settled usage is durable and idempotent in Postgres;</li>
+<li>hot checks normally touch only Redis;</li>
+<li>a cold key seeds from settled Postgres usage;</li>
+<li>worker crashes around a flush are safely retried by batch UUID;</li>
+<li>total Redis loss can still lose accepted usage that has not reached an immutable processing batch.</li>
+</ul>
+<p>Configure limiter Redis deliberately: persistence appropriate to the risk, replication/failover monitoring, and usually <code>maxmemory-policy noeviction</code> for quota state. A partial eviction of the running usage key while pending state survives can otherwise under-seed the next hot counter. The manual rehydration helper refuses to run while unsettled records exist for this reason.</p>
+<p>After <strong>durable settlement</strong>, a Redis wipe is safe: Postgres seeds the new counter and a customer already at quota remains at quota. Before settlement, the maximum loss is approximately the flush interval only if Redis disappears as a whole; persistence and failure timing decide the real bound.</p>
+<p>If a contractual or financial cap may never overshoot, put a durable reservation/event on the acknowledgement path—typically an idempotent database transaction, durable stream, or outbox—and reconcile unknown outcomes. That costs more latency because the stronger guarantee is genuinely more expensive.</p>
+<p>Engineering is often choosing and naming the size of a failure, not making failure impossible.</p>
+<h4>Act III checkpoint</h4>
+<p>Choose the owner and guarantee:</p>
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Hot copy</th>
+<th>Durable owner</th>
+<th>Guarantee in this demo</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Per-second token balance</td>
+<td>Redis</td>
+<td>none</td>
+<td>disposable protection</td>
+</tr>
+<tr>
+<td>Plan / customer override</td>
+<td>Redis cache</td>
+<td>Postgres</td>
+<td>refresh + invalidation</td>
+</tr>
+<tr>
+<td>Month-to-date running count</td>
+<td>Redis</td>
+<td>settled seed in Postgres</td>
+<td>operational, bounded loss</td>
+</tr>
+<tr>
+<td>Immutable flush identity</td>
+<td>Redis processing hash</td>
+<td><code>usage_flushes</code> UUID</td>
+<td>idempotent replay</td>
+</tr>
+<tr>
+<td>Settled usage aggregate</td>
+<td>Redis may cache it</td>
+<td>Postgres</td>
+<td>durable after commit</td>
+</tr>
+<tr>
+<td>Hard financial reservation</td>
+<td>not implemented here</td>
+<td>durable transaction/event</td>
+<td>required when overshoot is unacceptable</td>
+</tr>
+</tbody></table>
+<p>We now have correct fast limits and an explicit durability boundary instead of pretending every quota has the same guarantee.</p>
+<p>Then the unit “request” betrays us.</p>
+<hr>
+</article>
+  </section>
+<section class="copy-card" data-section="5">
+    <header class="card-head">
+      <div><span>SECTION 5 OF 6</span><h2>Act IV — Beyond request rate</h2></div>
+      <button class="copy-section">Copy this section</button>
+    </header>
+    <p class="assets"><strong>Images in this section:</strong> 10-rate-vs-concurrency.png, 11-cost-based.png, 13-adaptive.png, 12-defense-in-depth.png</p>
+    <article class="article-section"><h2>Act IV — Past Requests Per Second</h2>
+<h3>Scene 1: duration—the request that refuses to leave</h3>
+<p>Two endpoints both receive 2 requests/sec.</p>
+<ul>
+<li>Endpoint A returns in 50ms.</li>
+<li>Endpoint B renders a PDF in 6 seconds.</li>
+</ul>
+<p>A request-rate limiter sees identical traffic. The server does not.</p>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/10-rate-vs-concurrency.png" alt="Same rate, different concurrency"></p>
+<p>This is an application of Little&#39;s Law:</p>
+<pre><code class="language-txt">average work in flight ≈ arrival rate × average time in system
+</code></pre>
+<p>At 2/sec and 50ms, average concurrency is roughly 0.1. At 2/sec and 6 seconds, it is roughly 12.</p>
+<p>Stripe describes running a concurrent-request limiter specifically for expensive endpoints: instead of “N calls per second,” it says “at most N calls currently in progress” (<a href="https://stripe.com/blog/rate-limiters">Stripe Engineering</a>).</p>
+<p>A safe local primitive looks like this:</p>
+<pre><code class="language-js">const slot = limiter.tryAcquire(customerId);
+if (!slot.acquired) return res.status(429).end();
+
+try {
+  await renderPdf();
+} finally {
+  slot.release(); // errors must not leak capacity
+}
+</code></pre>
+<p>The <code>finally</code> is the feature. A leaked slot slowly turns a healthy service into a permanently full one.</p>
+<p>The tested implementation, including idempotent release, per-key and aggregate queue bounds, deadlines, and abort handling, is in <a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase4-beyond/concurrency.mjs"><code>code/phase4-beyond/concurrency.mjs</code></a>.</p>
+<p>Its scope is deliberately one Node process. A cross-pod concurrency cap cannot be a bare Redis <code>INCR</code>: if a pod dies before decrementing, capacity leaks forever. Distributed designs use owner routing or leased slot IDs with TTL, heartbeat, and fencing. Also decide whether the cap protects one customer, one endpoint, one downstream pool, each worker, or the whole fleet—those are different semaphores.</p>
+<hr>
+<h3>Scene 2: cost—the one-million-node “single request”</h3>
+<p>Consider four requests:</p>
+<pre><code class="language-txt">GET /health                              cost 1
+GET /search?q=...                       cost 20
+POST /chat with 3,000 tokens         cost 3,000
+GraphQL users(100) → posts(100)
+                  → comments(100)  cost 1,010,100
+</code></pre>
+<p>A request counter calls all four “1.”</p>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/11-cost-based.png" alt="Counting requests versus counting work"></p>
+<p>Real APIs meter the thing they actually protect:</p>
+<ul>
+<li>Shopify&#39;s GraphQL Admin API uses calculated query cost and a restoring bucket rather than treating every query equally (<a href="https://shopify.dev/docs/apps/build/apis/graphql-admin/rate-limits">Shopify GraphQL limits</a>).</li>
+<li>GitHub combines primary hourly request limits with secondary limits involving points, concurrency, and compute pressure (<a href="https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api">GitHub REST rate limits</a>).</li>
+<li>OpenAI documents multiple dimensions such as requests and tokens over minute/day periods; whichever budget is exhausted first constrains the call (<a href="https://developers.openai.com/api/docs/guides/rate-limits">OpenAI rate-limit guide</a>).</li>
+</ul>
+<p>The principle is broader than those products:</p>
+<blockquote>
+<p>Charge in the unit that predicts load or cost.</p>
+</blockquote>
+<p>That unit could be rows scanned, bytes exported, recipients emailed, images generated, database statements, or estimated CPU milliseconds.</p>
+<hr>
+<h3>Scene 3: reserve now, settle later</h3>
+<p>GraphQL cost can often be estimated before execution. An LLM call&#39;s final output-token count is not known until it finishes.</p>
+<p>Charging only afterwards creates a race:</p>
+<ol>
+<li>The organization has 10,000 tokens left.</li>
+<li>Four calls begin together, each expecting to use 3,000.</li>
+<li>All four see 10,000 available.</li>
+<li>They finish having used 12,000.</li>
+</ol>
+<p>The answer is the same pattern hotels use with credit cards:</p>
+<ol>
+<li><strong>Reserve</strong> an estimated maximum before the call.</li>
+<li>Reject if the reservation does not fit.</li>
+<li>Run the call.</li>
+<li><strong>Settle</strong> the actual cost—refund unused units or charge the difference.</li>
+<li><strong>Cancel</strong> the reservation if the call never happened.</li>
+</ol>
+<pre><code class="language-js">const reservationId = crypto.randomUUID();
+const hold = await budgets.reserve({
+  reservationId,
+  orgId,
+  estimatedTokens,
+});
+if (!hold.ok) return res.status(429).json(hold);
+
+try {
+  const result = await callModel({
+    idempotencyKey: reservationId,
+  });
+  await budgets.settle(reservationId, result.usage.total_tokens);
+  return result;
+} catch (error) {
+  if (error.definitelyNeverSent) {
+    await budgets.cancel(reservationId);
+  } else {
+    // A timeout is an unknown outcome: the provider may have completed and
+    // billed the call. Preserve the reservation and reconcile it later.
+    await budgets.markUnknown(reservationId);
+  }
+  throw error;
+}
+</code></pre>
+<p>The in-memory teaching version and a dual RPM+TPM limiter are in <a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase4-beyond/cost.mjs"><code>code/phase4-beyond/cost.mjs</code></a>. It validates the token estimate before consuming an RPM slot, preserves excess actual cost as debt instead of clamping it away, and lets an invalid settlement be corrected rather than terminalizing the reservation. A settled reservation cannot later be cancelled. Across pods or restarts, use a durable reservation ID and an atomic <code>RESERVED → SETTLED | CANCELLED | UNKNOWN</code> state machine.</p>
+<p>This is where idempotency and unknown outcomes become part of rate limiting rather than “billing details.”</p>
+<hr>
+<h3>Scene 4: the safe limit moves</h3>
+<p>You benchmark the endpoint and choose concurrency 40.</p>
+<p>Tomorrow:</p>
+<ul>
+<li>the database replica is slower;</li>
+<li>a noisy neighbor steals CPU;</li>
+<li>the cache hit rate falls;</li>
+<li>the downstream deploys a regression;</li>
+<li>or you resize the instance and 40 becomes unnecessarily conservative.</li>
+</ul>
+<p>A static number cannot know.</p>
+<p>TCP has always had the same problem: it does not know available network capacity in advance. It probes, watches for congestion, and backs off. Netflix applied that family of ideas to service concurrency in its open-source <code>concurrency-limits</code> work, aiming to find useful throughput while controlling latency (<a href="https://github.com/Netflix/concurrency-limits">Netflix repository</a>, <a href="https://netflixtechblog.medium.com/performance-under-load-3e6fa9a60581">Netflix TechBlog</a>).</p>
+<p>A Vegas-shaped controller demonstration tracks the best observed latency and estimates how much work is merely waiting:</p>
+<pre><code class="language-txt">estimated queue ≈ limit × (1 - minimum latency / current latency)
+</code></pre>
+<p>If latency is close to the minimum, increase cautiously. If latency rises and the implied queue grows, decrease. A hard failure causes a larger cut.</p>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/13-adaptive.png" alt="Adaptive concurrency reacting to latency"></p>
+<p>The chart is generated from the feedback-controller demonstration in <a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase4-beyond/adaptive.mjs"><code>code/phase4-beyond/adaptive.mjs</code></a>, not drawn to tell a convenient story. It is intentionally not a drop-in copy of Netflix or TCP: production controllers aggregate and smooth sample windows, filter app-limited periods, account for feedback delay, and connect the chosen number to a real admission semaphore. In this demonstration, latency rises from 100ms to 300ms; the limit falls before any request fails; when latency recovers, the limit climbs again.</p>
+<p>The minimum-latency baseline never resets itself while congested—a slow sample must not become the new definition of “healthy,” and a failed/dropped sample is a congestion signal rather than evidence of a faster baseline. Reset or probe the baseline only during controlled low load or after a known topology change.</p>
+<p>Adaptive control does not remove the need for maximums, minimums, hysteresis, metrics, or a kill switch. It removes the fantasy that one benchmark found a permanent number.</p>
+<hr>
+<h3>Scene 5: the building is already on fire</h3>
+<p>Rate limiting asks:</p>
+<pre><code class="language-txt">Has this caller consumed too much?
+</code></pre>
+<p>Load shedding asks:</p>
+<pre><code class="language-txt">Can the system safely accept this work at all?
+</code></pre>
+<p>During an incident, the answer may be “no” even for a caller comfortably below every personal limit.</p>
+<p>The companion <code>createLoadShedder</code> is a probability-controller demonstration: utilization is converted into per-priority targets, and admission uses slowly ramped values rather than reacting instantly. Marking a class “critical” does not reserve capacity by itself. Pair the shedder with a hard total concurrency cap and a bounded pool reserved for critical work; otherwise enough critical traffic can still collapse the service.</p>
+<p>Stripe describes reserving fleet capacity for critical operations and progressively shedding categories as workers saturate—test traffic before reads, reads before writes, while preserving critical calls as long as possible. It also warns that shedding and restoring too quickly creates flapping (<a href="https://stripe.com/blog/rate-limiters">Stripe Engineering</a>). Google&#39;s SRE material likewise treats graceful overload handling and load shedding as core reliability tools (<a href="https://sre.google/sre-book/handling-overload/">Google SRE: handling overload</a>).</p>
+<p>Imagine an e-commerce platform during a database slowdown:</p>
+<ol>
+<li>product recommendations disappear;</li>
+<li>analytics exports receive <code>503</code>;</li>
+<li>catalog reads become partially cached;</li>
+<li>cart writes continue;</li>
+<li>checkout retains reserved capacity.</li>
+</ol>
+<p>That is not unfair. It is the system choosing a smaller failure over a total failure.</p>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/12-defense-in-depth.png" alt="Six layers of protection"></p>
+<p>No single layer replaces the others:</p>
+<ol>
+<li>edge rules absorb volumetric abuse;</li>
+<li>request rate limits preserve caller fairness;</li>
+<li>concurrency limits cap work held in flight;</li>
+<li>cost and quota limits protect expensive dimensions and contracts;</li>
+<li>fleet shedding reserves global critical capacity;</li>
+<li>worker shedding protects each process as the last line of defence.</li>
+</ol>
+<hr>
+<h3>Scene 6: the multi-region boss battle</h3>
+<p>One global exact limit sounds ideal until every request in Singapore must coordinate with a counter in Virginia.</p>
+<p>You can have globally exact ordering, low latency, and tolerance of a region/network failure—but not all three without paying heavily in architecture and availability.</p>
+<p>Common strategies:</p>
+<h4>Home-region ownership</h4>
+<p>Hash each customer to one region and send its limiter decisions there. Exact per customer, but a home-region failure needs a migration story.</p>
+<h4>Divide the budget</h4>
+<p>A limit of 1,000 becomes 500 in each of two regions. Fast and independent, but unused capacity in one region cannot immediately help the other.</p>
+<h4>Local soft limit plus a global durable ledger</h4>
+<p>Each region grants a conservative local rate. Durable usage converges into a global ledger. You accept a bounded overshoot in exchange for availability; if overshoot is forbidden, the durable reservation must join the acknowledgement path.</p>
+<h4>Edge enforcement</h4>
+<p>Push coarse IP/device abuse limits into a CDN/WAF, while authenticated commercial limits stay in your application. Cloudflare emphasizes that edge enforcement keeps excess traffic away from the origin (<a href="https://blog.cloudflare.com/counting-things-a-lot-of-different-things">Cloudflare Engineering</a>).</p>
+<p>When someone asks for “a global rate limiter,” ask the follow-up question:</p>
+<blockquote>
+<p>How much overshoot is acceptable during a partition?</p>
+</blockquote>
+<p>That answer determines the design more than the algorithm name.</p>
+<hr>
+</article>
+  </section>
+<section class="copy-card" data-section="6">
+    <header class="card-head">
+      <div><span>SECTION 6 OF 6</span><h2>Client retries, production guide, and conclusion</h2></div>
+      <button class="copy-section">Copy this section</button>
+    </header>
+    <p class="assets"><strong>Images in this section:</strong> 05-backoff-jitter.png, 14-decision-tree.png</p>
+    <article class="article-section"><h2>Reverse angle — You are the client now</h2>
+<p>Your service calls an upstream API. It returns <code>429</code>.</p>
+<p>The worst response is an immediate retry. If hundreds of clients retry on the same fixed interval, they form synchronized spikes. The recovering service never gets a quiet moment.</p>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/05-backoff-jitter.png" alt="Fixed retries versus exponential backoff with jitter"></p>
+<p>Exponential backoff grows the retry window. <strong>Jitter</strong> stops independent clients from selecting the same point in that window. AWS&#39;s canonical analysis shows why backoff alone still clusters work and why randomized delay reduces contention (<a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">AWS Architecture Blog</a>).</p>
+<p>A safer helper makes the dangerous choices explicit. It accepts an <strong>options factory</strong>, so a streamed/body request can create a fresh body per attempt; it retries only selected transient statuses; it enforces per-attempt and total deadlines; and it will not replay a non-idempotent operation unless the caller provides an idempotency key that the upstream actually honors.</p>
+<pre><code class="language-js">import { fetchWithBackoff } from &#39;./client-retry.mjs&#39;;
+
+const operationKey = crypto.randomUUID();
+
+const response = await fetchWithBackoff(
+  &#39;https://api.example.com/jobs&#39;,
+  () =&gt; ({
+    method: &#39;POST&#39;,
+    headers: {
+      &#39;Content-Type&#39;: &#39;application/json&#39;,
+      &#39;Idempotency-Key&#39;: operationKey, // identical on every attempt
+    },
+    body: JSON.stringify(buildFreshPayload()),
+  }),
+  {
+    maxAttempts: 5,
+    attemptTimeoutMs: 10_000,
+    totalTimeoutMs: 45_000,
+    signal: request.signal,
+  },
+);
+</code></pre>
+<p>The verified helper is <a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase4-beyond/client-retry.mjs"><code>code/phase4-beyond/client-retry.mjs</code></a>. Its less-visible rules are the important part:</p>
+<ul>
+<li>it accepts only integer <code>Retry-After</code> delta-seconds or a valid HTTP date;</li>
+<li>it captures the first normalized method and non-blank idempotency key, then refuses a changed identity;</li>
+<li>a keyless <code>POST</code> receives its transient response untouched instead of being secretly delayed and replayed;</li>
+<li>each attempt timeout is capped by the remaining <strong>monotonic</strong> total deadline;</li>
+<li>caller cancellation stops both fetch and sleep;</li>
+<li><code>Retry-After</code> is a floor, then a full-jitter window is added—even when the floor is zero;</li>
+<li>a response body is cancelled only after the helper has committed to another attempt.</li>
+</ul>
+<p>The idempotency header is useful only when the upstream documents and enforces it. The options factory creates a fresh body or stream for each attempt. <code>AbortSignal.timeout</code> and <code>AbortSignal.any</code> are available in current Node and modern browsers; use your platform&#39;s controller equivalent elsewhere.</p>
+<p>Production rules around the helper:</p>
+<ul>
+<li>A timeout is an unknown outcome. A non-idempotent operation may have succeeded remotely even though you saw no response.</li>
+<li>Give retries both attempt and wall-clock budgets. Infinite retries are an outage amplifier.</li>
+<li>Retry at one layer. If SDK, service, queue worker, and gateway each try three times, one failure can become <code>3 × 3 × 3 × 3 = 81</code> calls.</li>
+<li>Treat <code>Retry-After</code> as a minimum. The helper spreads clients slightly later, never earlier.</li>
+<li>Unsuccessful calls still consume capacity on many APIs, so retry storms can exhaust the very quota they are trying to recover from.</li>
+</ul>
+<hr>
+<h2>The director&#39;s cut — designing a policy that matches reality</h2>
+<h3>Start from the bottleneck, not a round number</h3>
+<p>“100 requests per minute” is not a design. It is a number wearing a design costume.</p>
+<p>Suppose:</p>
+<ul>
+<li>the database safely handles 300 queries/sec;</li>
+<li>each API call uses 2 queries on average;</li>
+<li>you reserve 30% for internal and critical traffic;</li>
+<li>there are 20 active tenants.</li>
+</ul>
+<p>A rough shared budget is:</p>
+<pre><code class="language-txt">300 DB queries/sec ÷ 2 queries/request = 150 requests/sec
+150 × 70% allocatable                 = 105 requests/sec
+105 ÷ 20 active tenants               ≈ 5 requests/sec each
+</code></pre>
+<p>Then give a bounded burst—perhaps 20—because real traffic is uneven. Measure, dark-launch, and adjust. Do not confuse this rough fairness allocation with the fleet&#39;s global capacity limit.</p>
+<h3>Choose the key deliberately</h3>
+<p>A mature API often runs several budgets at once:</p>
+<pre><code class="language-txt">per IP             → anonymous abuse
+per account        → login attempts against one victim
+per API key        → integration contract
+per tenant         → noisy-neighbor fairness
+per endpoint       → expensive route protection
+per model          → LLM deployment capacity
+global             → fleet safety
+</code></pre>
+<p>For login, both dimensions matter:</p>
+<ul>
+<li>per source: one bot should not try thousands of accounts;</li>
+<li>per account: thousands of bots should not target one account.</li>
+</ul>
+<p>Rate limiting is useful against abuse but is not a complete DDoS defense. Application code should not be your first and only line against traffic large enough to saturate the network.</p>
+<h3>Bound every queue</h3>
+<p>Queues turn rejection into latency. An unbounded queue turns overload into memory growth, timeouts, and stale work. Set per-key <strong>and aggregate</strong> length limits, maximum wait time, and cancellation on client disconnect. Once any bound is exceeded, reject.</p>
+<p>Queue discipline matters too. Pure FIFO can let one slow, expensive item block cheap work behind it; strict priority can starve low-priority work forever. Consider separate bounded pools or weighted fair queues, and propagate deadlines so work that can no longer produce a useful response is dropped before execution.</p>
+<h3>Decide whether rejected work consumes budget</h3>
+<p>Usually:</p>
+<ul>
+<li>requests blocked by the fast rate gate do not consume monthly quota;</li>
+<li>a request that reaches the expensive downstream may consume cost even if it later fails;</li>
+<li>invalid requests may or may not consume request rate, depending on whether parsing/authentication itself is what you protect.</li>
+</ul>
+<p>Write the rule down. Inconsistent charging is harder for clients than a strict policy.</p>
+<hr>
+<h2>How to launch without becoming the incident</h2>
+<p>Stripe&#39;s “dark launch” advice deserves a concrete sequence.</p>
+<h3>Phase 0: observe only</h3>
+<p>Run every decision but never reject. Emit:</p>
+<pre><code class="language-txt">rate_limit_decisions_total{route, plan, outcome, reason}
+rate_limit_check_duration_seconds
+rate_limit_store_errors_total
+rate_limit_would_block_total
+</code></pre>
+<p>Do not put raw customer IDs into metric labels. That creates a high-cardinality observability bill. Put individual IDs in sampled structured logs or traces.</p>
+<h3>Phase 1: headers only</h3>
+<p>Return remaining/reset policy hints while still serving. Clients can begin adapting.</p>
+<h3>Phase 2: enforce for internal/test traffic</h3>
+<p>Find broken jobs before customers do.</p>
+<h3>Phase 3: enforce a tiny percentage</h3>
+<p>Start at 1%, compare errors, latency, support signals, and revenue-sensitive flows.</p>
+<h3>Phase 4: enforce broadly with a kill switch</h3>
+<p>Keep the ability to disable by endpoint, plan, or region without a deploy.</p>
+<h4>Watch these signals</h4>
+<ul>
+<li>allowed, rejected, and would-have-rejected counts by rule;</li>
+<li>limiter decision latency at p50/p95/p99;</li>
+<li>Redis errors and fail-open/fail-closed decisions;</li>
+<li>unique-key cardinality and memory;</li>
+<li>queue depth and wait time;</li>
+<li>rate-limit rejections versus upstream 5xx/latency;</li>
+<li>Redis hot count versus durable usage divergence;</li>
+<li>client retry rate after 429;</li>
+<li>percentage of critical traffic served during shedding.</li>
+</ul>
+<p>A rejection rate of zero does not prove the limiter is healthy. It may prove the middleware is not running.</p>
+<hr>
+<h2>The test suite I would demand in review</h2>
+<p>The companion tests use injected clocks so a minute passes instantly. At minimum, test:</p>
+<h4>Boundaries</h4>
+<ul>
+<li>the request just before a window edge;</li>
+<li>the request exactly on the edge;</li>
+<li>the 2× fixed-window burst;</li>
+<li>timestamps aging out of a sliding window.</li>
+</ul>
+<h4>Bursts and refill</h4>
+<ul>
+<li>an empty token bucket;</li>
+<li>exactly one fractional token refilling;</li>
+<li>a week of idle time still capped at capacity;</li>
+<li>a cost larger than one;</li>
+<li>GCRA&#39;s exact retry-after.</li>
+</ul>
+<h4>Concurrency</h4>
+<ul>
+<li>100 simultaneous checks against a limit of 10;</li>
+<li>errors and client disconnects release slots;</li>
+<li>double release does not corrupt state;</li>
+<li>queues stop at their configured bound.</li>
+</ul>
+<h4>Distribution</h4>
+<ul>
+<li>two pods race on the last slot;</li>
+<li>the naive GET/check/SET overshoots;</li>
+<li>the Lua script does not;</li>
+<li>multi-key scripts use Redis Cluster hash tags when keys must share a slot.</li>
+</ul>
+<h4>Failure</h4>
+<ul>
+<li>Redis timeout under fail-open and fail-closed policies;</li>
+<li>stale policy cache and explicit invalidation;</li>
+<li>Redis wipe after settlement followed by cold quota seeding;</li>
+<li>database failure while an immutable processing batch waits;</li>
+<li>worker crash after a database commit but before Redis cleanup;</li>
+<li>cardinality attack with millions of invented identities.</li>
+</ul>
+<h4>Properties, not just examples</h4>
+<p>Useful invariants:</p>
+<pre><code class="language-txt">0 ≤ token balance ≤ capacity
+successful calls never exceed fixed-window limit inside one window
+GCRA TAT never moves backward
+in-flight count never falls below zero
+settling one reservation twice changes nothing
+a rejected rate check never increments monthly usage
+</code></pre>
+<p>The included deterministic suites exercise these core invariants, the Redis check/write race, clock regressions, queue timeout/cancellation, cold quota seeding, crash-before/after-commit replay, and month rollover. The Redis Lua executes inside a real Lua 5.3 VM wired to a Redis-command test double.</p>
+<p>That still does <strong>not</strong> prove real Redis/Cluster/Postgres behavior. Before deployment, add integration tests for slot routing, script deployment, failover/replication loss, persistence and eviction, command timeouts, process death at injected failpoints, client disconnects, and database transaction isolation. The package calls itself verified teaching code—not a certified distributed system.</p>
+<hr>
+<h2>The final decision tree</h2>
+<p><img src="https://yuvis003.github.io/rate-limiting-slate/images/14-decision-tree.png" alt="Which limiter do I need?"></p>
+<p>The shortest useful recommendation is:</p>
+<ol>
+<li>Start with a token bucket per authenticated customer.</li>
+<li>Put it in memory while learning or while running exactly one process.</li>
+<li>Move the decision atomically to Redis before scaling out.</li>
+<li>Put policy and durable quota totals in Postgres; keep Postgres off the hot path.</li>
+<li>Add concurrency limits to long-running work.</li>
+<li>Add weighted cost when requests are not interchangeable.</li>
+<li>Add adaptive concurrency when the safe number changes with latency.</li>
+<li>Add priority load shedding before the incident that teaches you why.</li>
+<li>Return an actionable <code>429</code>; treat global overload as a different problem.</li>
+<li>On the client side, respect <code>Retry-After</code>, cap retries, and add full jitter.</li>
+</ol>
+<hr>
+<h2>End credits: what the bouncer was really doing</h2>
+<p>At the beginning, rate limiting looked like a counter at a nightclub door.</p>
+<p>By the end, it became a set of explicit choices:</p>
+<ul>
+<li>identity: whose budget is this?</li>
+<li>dimension: requests, cost, concurrency, or time?</li>
+<li>scope: process, cluster, region, or world?</li>
+<li>state: disposable cache or durable truth?</li>
+<li>failure: open, closed, queued, or shed?</li>
+<li>priority: which work must survive when not everything can?</li>
+<li>feedback: is the limit fixed, or can the system discover it?</li>
+</ul>
+<p>That is the deeper lesson.</p>
+<p>A rate limiter is not middleware that says “no.”</p>
+<p>It is a small scheduler. It decides how shared capacity is divided when demand exceeds supply. The algorithm determines the shape of the traffic. The key determines fairness. The store determines scope. The failure mode determines what happens on your worst day.</p>
+<p>Fifteen lines can protect one Node process.</p>
+<p>Redis can make the decision shared and atomic.</p>
+<p>Postgres can make the commercial truth durable.</p>
+<p>Concurrency, cost, adaptive control, and load shedding can make the policy resemble the real work.</p>
+<p>And if the design is good, one broken client never gets to eat the API again.</p>
+<hr>
+<h3>Hands-on files</h3>
+<ul>
+<li><a href="https://yuvis003.github.io/rate-limiting-slate/rate-limiting-playground.html"><code>rate-limiting-playground.html</code></a> — interactive, zero-dependency browser lab</li>
+<li><a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase1-bare/limiters.mjs"><code>code/phase1-bare/limiters.mjs</code></a> — six algorithms with no Redis or database</li>
+<li><a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase2-redis/scripts.mjs"><code>code/phase2-redis/scripts.mjs</code></a> — atomic Redis Lua scripts</li>
+<li><a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase2-redis/limiter.mjs"><code>code/phase2-redis/limiter.mjs</code></a> — Redis wrapper and Express middleware</li>
+<li><a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase3-db-redis/schema.sql"><code>code/phase3-db-redis/schema.sql</code></a> — Postgres policy and usage schema</li>
+<li><a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase3-db-redis/quota-service.mjs"><code>code/phase3-db-redis/quota-service.mjs</code></a> — cached policy, cold quota seed, and idempotent processing batches</li>
+<li><a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase4-beyond/concurrency.mjs"><code>code/phase4-beyond/concurrency.mjs</code></a> — bounded concurrent work</li>
+<li><a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase4-beyond/cost.mjs"><code>code/phase4-beyond/cost.mjs</code></a> — cost estimation, reservation/settlement, RPM+TPM</li>
+<li><a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase4-beyond/adaptive.mjs"><code>code/phase4-beyond/adaptive.mjs</code></a> — AIMD/Vegas-shaped controller and load-shedding demonstrations</li>
+<li><a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/code/phase4-beyond/client-retry.mjs"><code>code/phase4-beyond/client-retry.mjs</code></a> — bounded, replay-aware client backoff</li>
+<li><a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/tools/test-phase1.mjs"><code>tools/test-phase1.mjs</code></a> through <a href="https://github.com/yuviS003/rate-limiting-slate/blob/main/tools/test-phase4.mjs"><code>tools/test-phase4.mjs</code></a> — executable verification</li>
+</ul>
+<h3>Primary references</h3>
+<ul>
+<li><a href="https://stripe.com/blog/rate-limiters">Stripe Engineering — Scaling your API with rate limiters</a></li>
+<li><a href="https://blog.cloudflare.com/counting-things-a-lot-of-different-things">Cloudflare Engineering — Counting things at scale</a></li>
+<li><a href="https://redis.io/docs/latest/develop/use-cases/rate-limiter/">Redis — Rate-limiter use case</a></li>
+<li><a href="https://redis.io/docs/latest/develop/use-cases/rate-limiter/nodejs/">Redis — Token bucket with Node.js and Lua</a></li>
+<li><a href="https://brandur.org/rate-limiting">Brandur Leach — Rate limiting, cells, and GCRA</a></li>
+<li><a href="https://shopify.dev/docs/api/usage/limits">Shopify — API limits</a></li>
+<li><a href="https://shopify.dev/docs/apps/build/apis/graphql-admin/rate-limits">Shopify — GraphQL Admin API rate limits</a></li>
+<li><a href="https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api">GitHub — REST API rate limits</a></li>
+<li><a href="https://developers.openai.com/api/docs/guides/rate-limits">OpenAI — Rate limits</a></li>
+<li><a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">AWS Architecture Blog — Exponential backoff and jitter</a></li>
+<li><a href="https://github.com/Netflix/concurrency-limits">Netflix — Concurrency Limits</a></li>
+<li><a href="https://netflixtechblog.medium.com/performance-under-load-3e6fa9a60581">Netflix TechBlog — Performance under load</a></li>
+<li><a href="https://sre.google/sre-book/handling-overload/">Google SRE — Handling overload</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc6585">IETF RFC 6585 — 429 Too Many Requests</a></li>
+<li><a href="https://www.ietf.org/archive/id/draft-ietf-httpapi-ratelimit-headers-11.html">IETF HTTPAPI — RateLimit header fields draft</a></li>
+</ul>
+<p><em>External-source material was summarized and rephrased for compliance with licensing restrictions. No external diagram or passage was reproduced. Code examples and visuals in this package are original.</em></p>
+</article>
+  </section>
+</main>
+<div class="status">Copied</div>
+<footer><div class="shell">After all sections are pasted, remove every blue image marker, upload its named asset, preview, and publish.</div></footer>
+<script>
+const status=document.querySelector('.status');
+const flash=(text)=>{status.textContent=text;status.classList.add('show');setTimeout(()=>status.classList.remove('show'),1600)};
+function tableToCards(table){
+  const headers=[...table.querySelectorAll('thead th')].map(x=>x.innerText.trim());
+  const wrap=document.createElement('div');wrap.className='table-cards';
+  for(const row of table.querySelectorAll('tbody tr')){
+    const card=document.createElement('div');card.className='table-row';
+    const cells=[...row.children];
+    card.innerHTML=cells.map((cell,i)=>'<p><strong>'+escapeHtml(headers[i]||'Item')+'</strong>'+cell.innerHTML+'</p>').join('');
+    wrap.append(card);
+  }
+  table.replaceWith(wrap);
+}
+function escapeHtml(text){const d=document.createElement('div');d.textContent=text;return d.innerHTML}
+function preparedClone(article){
+  const clone=article.cloneNode(true);
+  for(const image of clone.querySelectorAll('img')){
+    const marker=document.createElement('p');marker.className='image-marker';
+    marker.textContent='📷 ADD IMAGE HERE — '+image.src.split('/').pop()+' — then delete this line';
+    image.replaceWith(marker);
+  }
+  for(const table of [...clone.querySelectorAll('table')])tableToCards(table);
+  return clone;
+}
+async function copyRich(nodes,label){
+  const holder=document.createElement('div');for(const node of nodes)holder.append(preparedClone(node));
+  const html=holder.innerHTML,plain=holder.innerText;
+  try{
+    await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([plain],{type:'text/plain'})})]);
+  }catch(error){
+    document.body.append(holder);const range=document.createRange();range.selectNodeContents(holder);const selection=getSelection();selection.removeAllRanges();selection.addRange(range);document.execCommand('copy');selection.removeAllRanges();holder.remove();
+  }
+  flash(label+' copied');
+}
+document.querySelectorAll('.copy-section').forEach(button=>button.onclick=()=>copyRich([button.closest('.copy-card').querySelector('.article-section')],button.closest('.copy-card').dataset.section));
+document.querySelector('.copy-all').onclick=()=>copyRich([...document.querySelectorAll('.article-section')],'Entire body');
+document.querySelectorAll('[data-copy]').forEach(button=>button.onclick=async()=>{await navigator.clipboard.writeText(button.dataset.copy);flash('Field')});
+</script>
+</body>
+</html>
