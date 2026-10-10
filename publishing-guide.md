@@ -30,7 +30,7 @@ If you publish the full folder, keep `images/`, `videos/`, and `code/` beside th
 | Layers | `12-defense-in-depth.png` | “Six protection layers from edge controls to worker load shedding.” |
 | Conclusion | `14-decision-tree.png` | “Decision tree for choosing rate, concurrency, cost, adaptive or client-side controls.” |
 
-Keep the two GIFs in the long-form web version. If an editor does not preserve animated media, upload the matching MP4 as a native companion post and use the PNG still in the article.
+Keep the two GIFs in the long-form web version. If an editor does not preserve animated media, upload the matching MP4 as a native companion post and use the PNG still in the article. Both MP4s are H.264 at 1280×720 and comfortably exceed LinkedIn's 75 KB minimum.
 
 ## 3. Paste the article into LinkedIn correctly
 

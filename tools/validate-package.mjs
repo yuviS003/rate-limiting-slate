@@ -39,7 +39,7 @@ for (const id of ["lab", "movie", "scenario", "code", "quiz"]) {
 
 for (const file of ["token-bucket.mp4", "redis-race.mp4"]) {
   const full = resolve(ROOT, "videos", file);
-  if (!existsSync(full) || statSync(full).size < 10_000) errors.push(`video missing or empty: ${file}`);
+  if (!existsSync(full) || statSync(full).size <= 75 * 1024) errors.push(`video missing or not above LinkedIn's 75 KB minimum: ${file}`);
 }
 
 for (const heading of ["# Act I", "# Act II", "# Act III", "# Act IV"]) {
