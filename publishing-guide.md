@@ -2,9 +2,9 @@
 
 ## Canonical locations
 
-- GitHub repository: `https://github.com/bhang-bhosda/rate-limiting-article`
-- Interactive lab after GitHub Pages is enabled: `https://bhang-bhosda.github.io/rate-limiting-article/rate-limiting-playground.html`
-- Repository source links use: `https://github.com/bhang-bhosda/rate-limiting-article/blob/main/...`
+- GitHub repository: `https://github.com/yuviS003/rate-limiting-slate`
+- Interactive lab after GitHub Pages is enabled: `https://yuvis003.github.io/rate-limiting-slate/rate-limiting-playground.html`
+- Repository source links use: `https://github.com/yuviS003/rate-limiting-slate/blob/main/...`
 
 ## 1. Publish the interactive companion first
 
