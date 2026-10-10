@@ -1,4 +1,8 @@
 node_modules/
 archive/
+publish/
+publishing-guide.md
+tools/build-linkedin-paste.mjs
+tools/build-publish-copy.mjs
 .DS_Store
 Thumbs.db

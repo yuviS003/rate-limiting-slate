@@ -1,5 +1,5 @@
 import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
-import { resolve, dirname, extname } from "node:path";
+import { resolve, dirname } from "node:path";
 import sharp from "sharp";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -39,35 +39,11 @@ for (const id of ["lab", "movie", "scenario", "code", "quiz"]) {
 
 for (const file of ["token-bucket.mp4", "redis-race.mp4"]) {
   const full = resolve(ROOT, "videos", file);
-  if (!existsSync(full) || statSync(full).size <= 75 * 1024) errors.push(`video missing or not above LinkedIn's 75 KB minimum: ${file}`);
+  if (!existsSync(full) || statSync(full).size < 10_000) errors.push(`video missing or empty: ${file}`);
 }
 
 for (const heading of ["# Act I", "# Act II", "# Act III", "# Act IV"]) {
   if (!article.includes(heading)) errors.push(`article section missing: ${heading}`);
-}
-
-const pastePath = resolve(ROOT, "publish", "linkedin-paste.html");
-if (!existsSync(pastePath)) errors.push("LinkedIn rich-text copier missing");
-else {
-  const pastePage = readFileSync(pastePath, "utf8");
-  const sections = pastePage.match(/class="copy-card"/g)?.length ?? 0;
-  if (sections !== 6) errors.push(`LinkedIn copier has ${sections} sections instead of 6`);
-  if (!pastePage.includes("ClipboardItem") || !pastePage.includes("ADD IMAGE HERE")) {
-    errors.push("LinkedIn copier controls or image markers missing");
-  }
-}
-
-const campaignPath = resolve(ROOT, "publish", "linkedin-campaign-calendar.md");
-if (!existsSync(campaignPath)) errors.push("LinkedIn campaign calendar missing");
-else {
-  const campaign = readFileSync(campaignPath, "utf8");
-  for (let i = 1; i <= 9; i++) {
-    if (!campaign.includes(`# Post ${i} —`)) errors.push(`campaign Post ${i} missing`);
-  }
-  const assets = [...campaign.matchAll(/`((?:images|videos)\/[A-Za-z0-9._/-]+)`/g)].map((m) => m[1]);
-  for (const asset of new Set(assets)) {
-    if (!existsSync(resolve(ROOT, asset))) errors.push(`campaign asset missing: ${asset}`);
-  }
 }
 
 const words = (article.replace(/```[\s\S]*?```/g, " ").match(/[A-Za-z0-9][A-Za-z0-9’'/-]*/g) ?? []).length;
@@ -83,7 +59,5 @@ console.log(`local links checked: ${links.length - external}`);
 console.log(`external references: ${external}`);
 console.log(`raster assets:       ${rasters.length}, all <= 2000px`);
 console.log("playground:          script parses; 5 activity sections present");
-console.log("LinkedIn copier:     6 rich-text sections present");
 console.log("videos:              2 present");
-console.log("LinkedIn campaign:   9 posts with existing assets");
 console.log("package validation passed");

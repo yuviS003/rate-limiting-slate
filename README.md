@@ -4,10 +4,9 @@ This folder contains the publishable article, an interactive browser lab, verifi
 
 ## Start here
 
-1. Read/edit [`rate-limiting-article.md`](rate-limiting-article.md).
+1. Read [`rate-limiting-article.md`](rate-limiting-article.md).
 2. Open [`rate-limiting-playground.html`](rate-limiting-playground.html) directly in a browser.
-3. Read [`publishing-guide.md`](publishing-guide.md) before publishing.
-4. Run `npm install` and `npm test` to reproduce the code verification.
+3. Run `npm install` and `npm test` to reproduce the code verification.
 
 ## Four implementation phases
 
@@ -43,4 +42,4 @@ Redis is emulated around a real Lua 5.3 VM for deterministic script tests. Befor
 - `videos/token-bucket.mp4` and `videos/redis-race.mp4`: native video versions.
 - SVG source is retained beside each PNG.
 
-The first, shorter draft is archived at `archive/rate-limiting-article-v1.md`.
+LinkedIn publishing drafts and campaign material are intentionally kept outside this repository.

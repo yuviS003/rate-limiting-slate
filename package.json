@@ -7,7 +7,6 @@
   "scripts": {
     "test": "node tools/test-phase1.mjs && node tools/test-phase2.mjs && node tools/test-phase3.mjs && node tools/test-phase4.mjs && node tools/verify-snippets.mjs && node tools/validate-package.mjs",
     "validate": "node tools/validate-package.mjs",
-    "build:publish": "node tools/build-publish-copy.mjs && node tools/build-linkedin-paste.mjs",
     "build:images": "node tools/build.mjs",
     "build:animations": "node tools/d03gif.mjs && node tools/d07gif.mjs"
   },
@@ -23,7 +22,6 @@
     "express-rate-limit": "8.7.1",
     "fengari": "0.1.5",
     "gifenc": "1.0.3",
-    "marked": "18.1.0",
     "rate-limit-redis": "6.0.1",
     "sharp": "0.35.5"
   }
