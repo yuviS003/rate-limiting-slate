@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rate Limiting: The Interactive Lab</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg:#08111f; --panel:#111c31; --panel2:#0d1729; --line:#263653;
+    --text:#e9f0fc; --muted:#91a2bf; --dim:#62738f; --good:#36d69a;
+    --bad:#ff7478; --warn:#ffc332; --info:#62a6ff; --purple:#ac8bff;
+    --shadow:0 20px 60px rgba(0,0,0,.32);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:radial-gradient(circle at 18% -10%,#18315a 0,transparent 35%),var(--bg);color:var(--text);font:16px/1.55 Inter,Segoe UI,system-ui,sans-serif}
+  button,input,select{font:inherit}
+  button{cursor:pointer}
+  a{color:var(--info)}
+  .shell{width:min(1180px,calc(100% - 32px));margin:auto}
+  .hero{padding:72px 0 46px;text-align:center}
+  .eyebrow{color:var(--good);font:700 12px/1.2 ui-monospace,Consolas,monospace;letter-spacing:.18em;text-transform:uppercase}
+  h1{font-size:clamp(42px,7vw,82px);line-height:.97;letter-spacing:-.055em;margin:17px auto 24px;max-width:1000px}
+  .hero p{color:var(--muted);font-size:clamp(17px,2.2vw,22px);max-width:760px;margin:auto}
+  .hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:28px}
+  .btn{border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);padding:11px 16px;font-weight:700;transition:.18s transform,.18s border-color,.18s background}
+  .btn:hover{transform:translateY(-1px);border-color:var(--info)}
+  .btn.primary{background:var(--good);border-color:var(--good);color:#062018}
+  .btn.bad{border-color:rgba(255,116,120,.55);color:var(--bad)}
+  .btn.warn{border-color:rgba(255,195,50,.5);color:var(--warn)}
+  section{margin:36px 0 74px}
+  .section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:20px}
+  .section-head h2{font-size:clamp(27px,4vw,42px);letter-spacing:-.035em;margin:4px 0}
+  .section-head p{color:var(--muted);max-width:620px;margin:0}
+  .card{background:linear-gradient(180deg,rgba(19,31,53,.98),rgba(11,21,38,.98));border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+  .lab{display:grid;grid-template-columns:310px 1fr;overflow:hidden;min-height:620px}
+  .controls{border-right:1px solid var(--line);padding:22px;background:rgba(7,14,27,.35)}
+  .controls h3,.stage h3{margin:0 0 16px}
+  .control{margin:0 0 17px}
+  .control label{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;font-weight:650;margin-bottom:6px}
+  .control output{color:var(--text);font-family:ui-monospace,Consolas,monospace}
+  select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--text)}
+  input[type=range]{width:100%;accent-color:var(--good)}
+  .control-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .traffic-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:20px}
+  .traffic-buttons .btn{padding:9px 7px;font-size:13px}
+  .tip{border-left:3px solid var(--info);background:rgba(98,166,255,.08);padding:10px 12px;color:var(--muted);font-size:13px;margin-top:18px;border-radius:0 8px 8px 0}
+  .stage{padding:22px;min-width:0}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+  .stat{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .stat span{display:block;color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.1em}
+  .stat strong{display:block;font:700 24px/1.25 ui-monospace,Consolas,monospace;margin-top:3px}
+  .stat.good strong{color:var(--good)} .stat.bad strong{color:var(--bad)}
+  .canvas-wrap{position:relative;border:1px solid var(--line);border-radius:12px;background:#080f1c;overflow:hidden}
+  canvas{display:block;width:100%;height:330px}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin:10px 2px 0}
+  .dot{width:8px;height:8px;display:inline-block;border-radius:50%;margin-right:6px}
+  .state-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .state-box{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--panel2);min-height:98px}
+  .state-box .label{font:700 11px ui-monospace,Consolas,monospace;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+  .state-box pre{white-space:pre-wrap;margin:7px 0 0;color:var(--muted);font:13px/1.45 ui-monospace,Consolas,monospace}
+  .event-log{max-height:98px;overflow:auto;margin-top:7px;font:12px/1.55 ui-monospace,Consolas,monospace;color:var(--muted)}
+  .event-log .allow{color:var(--good)} .event-log .block{color:var(--bad)}
+  .predict{padding:20px;margin-top:18px;border-color:rgba(255,195,50,.45)}
+  .predict-head{display:flex;justify-content:space-between;gap:20px;align-items:center}
+  .predict h3{margin:0;font-size:18px}.predict p{color:var(--muted);margin:5px 0 0}
+  .choices{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .choice.correct{border-color:var(--good);background:rgba(54,214,154,.1)}
+  .choice.wrong{border-color:var(--bad);background:rgba(255,116,120,.1)}
+  .reveal{display:none;margin-top:12px;color:var(--muted)} .reveal.show{display:block}
+  .acts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .act{position:relative;padding:20px;min-height:235px;transition:.2s transform,.2s border-color}
+  .act:hover{transform:translateY(-3px)}
+  .act:nth-child(1){--accent:var(--info)} .act:nth-child(2){--accent:var(--purple)}
+  .act:nth-child(3){--accent:var(--good)} .act:nth-child(4){--accent:var(--warn)}
+  .act{border-top:3px solid var(--accent)}
+  .act small{color:var(--accent);font:700 12px ui-monospace,Consolas,monospace;letter-spacing:.14em}
+  .act h3{font-size:20px;margin:9px 0}.act p{color:var(--muted);font-size:14px}
+  .act .breaks{border-top:1px solid var(--line);padding-top:11px;margin-top:12px;color:var(--bad);font-size:12px}
+  .scenario{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+  .scenario-main,.scenario-side{padding:22px}
+  .scenario-buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}
+  .scenario-buttons button{text-align:left;min-height:74px}
+  .scenario-buttons small{display:block;color:var(--muted);font-weight:400;margin-top:3px}
+  .architecture{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;align-items:stretch;margin-top:18px}
+  .layer{padding:14px 8px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);text-align:center;font-size:12px;color:var(--muted);transition:.2s all}
+  .layer strong{display:block;color:var(--text);font-size:13px;margin:5px 0}.layer.active{border-color:var(--good);box-shadow:0 0 0 2px rgba(54,214,154,.12)}
+  .answer{border-left:3px solid var(--good);padding:12px 14px;background:rgba(54,214,154,.07);border-radius:0 8px 8px 0;min-height:92px;color:var(--muted)}
+  .answer strong{color:var(--good)}
+  .quiz{display:grid;gap:12px}
+  .question{padding:18px}.question h3{font-size:16px;margin:0 0 12px}
+  .question .options{display:grid;gap:7px}
+  .question button{text-align:left;background:var(--panel2);border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:9px 12px}
+  .question button.correct{border-color:var(--good);color:var(--good)}
+  .question button.wrong{border-color:var(--bad);color:var(--bad)}
+  .quiz-result{padding:18px;text-align:center;font-size:20px;display:none}.quiz-result.show{display:block}
+  .code-card{overflow:hidden}.code-tabs{display:flex;gap:0;border-bottom:1px solid var(--line);overflow:auto}
+  .code-tab{background:transparent;border:0;border-right:1px solid var(--line);padding:12px 15px;color:var(--muted);white-space:nowrap}
+  .code-tab.active{background:var(--panel);color:var(--good)}
+  .code-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#070d18;border-bottom:1px solid var(--line)}
+  .code-head span{color:var(--dim);font:12px ui-monospace,Consolas,monospace}
+  .copy{border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:7px;padding:6px 10px;font-size:12px}
+  pre.code{margin:0;padding:18px;overflow:auto;min-height:290px;background:#080f1c;color:#cbd8ef;font:13px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}
+  .kw{color:var(--purple)} .fn{color:var(--info)} .str{color:var(--good)} .cm{color:var(--dim)}
+  footer{border-top:1px solid var(--line);padding:30px 0 50px;color:var(--muted);text-align:center}
+  .pulse{animation:pulse .45s ease}@keyframes pulse{50%{transform:scale(1.025);border-color:var(--good)}}
+  @media(max-width:900px){.lab{grid-template-columns:1fr}.controls{border-right:0;border-bottom:1px solid var(--line)}.acts{grid-template-columns:1fr 1fr}.scenario{grid-template-columns:1fr}.architecture{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:580px){.shell{width:min(100% - 18px,1180px)}.hero{padding-top:45px}.stats{grid-template-columns:1fr 1fr}.state-row,.acts{grid-template-columns:1fr}.architecture{grid-template-columns:1fr 1fr}.scenario-buttons{grid-template-columns:1fr}.section-head{display:block}.lab{border-radius:10px}.stage,.controls{padding:14px}}
+</style>
+</head>
+<body>
+<header class="hero shell">
+  <div class="eyebrow">An interactive companion to the article</div>
+  <h1>Rate limiting.<br>Touch it until it clicks.</h1>
+  <p>Send traffic, break the boundary, drain the bucket, trigger a 429, and watch four algorithms make different decisions on the same requests.</p>
+  <div class="hero-actions">
+    <a class="btn primary" href="#lab">Open the traffic lab</a>
+    <a class="btn" href="#movie">See the four acts</a>
+    <a class="btn" href="#quiz">Take the final checkpoint</a>
+  </div>
+</header>
+
+<main class="shell">
+<section id="lab">
+  <div class="section-head">
+    <div><div class="eyebrow">The traffic lab</div><h2>Same requests. Different rules.</h2></div>
+    <p>Pick an algorithm, tune it, then use the same burst against each one. Green requests pass. Red requests leave with a 429.</p>
+  </div>
+  <div class="card lab">
+    <aside class="controls">
+      <h3>Control room</h3>
+      <div class="control">
+        <label for="algorithm">Algorithm</label>
+        <select id="algorithm">
+          <option value="fixed">Fixed window</option>
+          <option value="sliding">Sliding window log</option>
+          <option value="token" selected>Token bucket</option>
+          <option value="gcra">GCRA</option>
+        </select>
+      </div>
+      <div class="control">
+        <label>Limit / capacity <output id="limitOut">10</output></label>
+        <input id="limit" type="range" min="2" max="30" value="10">
+      </div>
+      <div class="control">
+        <label>Window <output id="windowOut">5.0s</output></label>
+        <input id="window" type="range" min="2" max="15" value="5" step="1">
+      </div>
+      <div class="control" id="rateControl">
+        <label>Refill rate <output id="rateOut">2.0/sec</output></label>
+        <input id="rate" type="range" min="0.5" max="8" value="2" step="0.5">
+      </div>
+      <div class="control" id="burstControl">
+        <label>Burst tolerance <output id="burstOut">5</output></label>
+        <input id="burst" type="range" min="1" max="15" value="5">
+      </div>
+      <div class="traffic-buttons">
+        <button class="btn primary" id="sendOne">Send one</button>
+        <button class="btn warn" id="sendBurst">Burst ×10</button>
+        <button class="btn" id="auto">Start 4/sec</button>
+        <button class="btn bad" id="reset">Reset</button>
+      </div>
+      <div class="tip" id="algorithmTip">Tokens refill continuously. Each allowed request spends one; a full bucket absorbs a short burst.</div>
+    </aside>
+    <div class="stage">
+      <div class="stats">
+        <div class="stat"><span>Sent</span><strong id="sent">0</strong></div>
+        <div class="stat good"><span>Allowed</span><strong id="allowed">0</strong></div>
+        <div class="stat bad"><span>Blocked</span><strong id="blocked">0</strong></div>
+        <div class="stat"><span>Current state</span><strong id="current">10.0</strong></div>
+      </div>
+      <div class="canvas-wrap"><canvas id="traffic" aria-label="Live rate limiting simulation"></canvas></div>
+      <div class="legend"><span><i class="dot" style="background:var(--info)"></i>incoming</span><span><i class="dot" style="background:var(--good)"></i>allowed</span><span><i class="dot" style="background:var(--bad)"></i>429 blocked</span><span><i class="dot" style="background:var(--warn)"></i>window boundary</span></div>
+      <div class="state-row">
+        <div class="state-box"><div class="label">What the limiter stores</div><pre id="stateText">tokens: 10.00\nlastRefill: now</pre></div>
+        <div class="state-box"><div class="label">Decision log</div><div class="event-log" id="events">Waiting for traffic…</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card predict" id="predict">
+    <div class="predict-head"><div><div class="eyebrow">Pause and predict</div><h3>Capacity 10, refill 2/sec. You burst 12 requests at once. How many pass?</h3><p>Choose before touching the simulator.</p></div></div>
+    <div class="choices">
+      <button class="btn choice" data-answer="wrong">2</button>
+      <button class="btn choice" data-answer="correct">10</button>
+      <button class="btn choice" data-answer="wrong">12</button>
+      <button class="btn choice" data-answer="wrong">It depends on the window</button>
+    </div>
+    <div class="reveal" id="predictReveal"><strong style="color:var(--good)">10 pass.</strong> Capacity controls the instantaneous burst. With no other traffic, one rejected request can retry near 500ms and the other near 1s as tokens return.</div>
+  </div>
+</section>
+
+<section id="movie">
+  <div class="section-head">
+    <div><div class="eyebrow">The four-act movie</div><h2>Every act fixes the last act’s failure.</h2></div>
+    <p>Do not start with the final architecture. Earn each dependency by finding the problem it solves.</p>
+  </div>
+  <div class="acts">
+    <article class="card act"><small>ACT I</small><h3>The Naked Counter</h3><p>A <code>Map</code>, timestamps, and arithmetic. Correct for one process and the best way to learn the algorithms.</p><div class="breaks">Plot twist: a second pod silently doubles every limit.</div></article>
+    <article class="card act"><small>ACT II</small><h3>One Shared Brain</h3><p>Redis gives every pod one counter. Lua makes read → decide → write one atomic step.</p><div class="breaks">Plot twist: Redis restarts and the month's billable truth disappears.</div></article>
+    <article class="card act"><small>ACT III</small><h3>Speed and Truth</h3><p>Redis protects each second. Postgres holds plans and a durable usage ledger. Hot path and truth stop fighting.</p><div class="breaks">Plot twist: a health check and a million-node GraphQL query both count as “one.”</div></article>
+    <article class="card act"><small>ACT IV</small><h3>Past Requests/Second</h3><p>Cost, concurrency, adaptive limits, priority, and load shedding model the work the service actually performs.</p><div class="breaks">This is where the large APIs live. You still start in Act I.</div></article>
+  </div>
+</section>
+
+<section id="scenario">
+  <div class="section-head">
+    <div><div class="eyebrow">Architecture detective</div><h2>Choose the failure. Find the layer.</h2></div>
+    <p>A 429 is not the answer to every overload problem. Click a real-world failure mode and inspect the first useful defence.</p>
+  </div>
+  <div class="scenario">
+    <div class="card scenario-main">
+      <div class="scenario-buttons">
+        <button class="btn scenario-choice" data-case="bot">A bot hits <code>/login</code> 5,000/sec<small>Same path, many IPs, no authenticated user.</small></button>
+        <button class="btn scenario-choice" data-case="slow">Twenty PDF exports take 30s each<small>Low RPS, but every call pins a worker.</small></button>
+        <button class="btn scenario-choice" data-case="graphql">One GraphQL query walks 1M nodes<small>Only one request. Enormous cost.</small></button>
+        <button class="btn scenario-choice" data-case="incident">Database latency jumps from 20ms to 2s<small>Ordinary traffic is now more than the box can serve.</small></button>
+      </div>
+      <div class="architecture">
+        <div class="layer" data-layer="edge">1<strong>Edge / WAF</strong>source abuse</div>
+        <div class="layer" data-layer="rate">2<strong>Rate</strong>requests/time</div>
+        <div class="layer" data-layer="concurrency">3<strong>Concurrency</strong>in flight</div>
+        <div class="layer" data-layer="cost">4<strong>Cost</strong>units</div>
+        <div class="layer" data-layer="adaptive">5<strong>Adaptive</strong>latency signal</div>
+        <div class="layer" data-layer="shed">6<strong>Shedder</strong>priority</div>
+      </div>
+    </div>
+    <aside class="card scenario-side">
+      <div class="eyebrow">Director's answer</div>
+      <h3 id="scenarioTitle">Pick a scene</h3>
+      <div class="answer" id="scenarioAnswer">The useful layer will light up here, with the reason a normal request-rate limit is or is not enough.</div>
+    </aside>
+  </div>
+</section>
+
+<section id="code">
+  <div class="section-head">
+    <div><div class="eyebrow">The source under the picture</div><h2>Four algorithms in bare JavaScript.</h2></div>
+    <p>No package and no Redis. Read this version first; moving it into Lua is an infrastructure change, not a new idea.</p>
+  </div>
+  <div class="card code-card">
+    <div class="code-tabs">
+      <button class="code-tab active" data-code="fixed">Fixed window</button>
+      <button class="code-tab" data-code="sliding">Sliding log</button>
+      <button class="code-tab" data-code="token">Token bucket</button>
+      <button class="code-tab" data-code="gcra">GCRA</button>
+    </div>
+    <div class="code-head"><span id="codeFile">fixed-window.js</span><button class="copy" id="copyCode">Copy code</button></div>
+    <pre class="code"><code id="codeText"></code></pre>
+  </div>
+</section>
+
+<section id="quiz">
+  <div class="section-head">
+    <div><div class="eyebrow">Final checkpoint</div><h2>Can you survive production?</h2></div>
+    <p>Five questions. No trick answers—only the failure modes you just watched.</p>
+  </div>
+  <div class="quiz" id="quizList"></div>
+  <div class="card quiz-result" id="quizResult"></div>
+</section>
+</main>
+
+<footer><div class="shell">Built as a zero-dependency companion to <strong>Rate Limiting: From 15 Lines to Production</strong>. Open this file directly; no server or install required.</div></footer>
+
+<script>
+(() => {
+  'use strict';
+
+  // ---------------------------------------------------------------- lab state
+  const $ = (q, root=document) => root.querySelector(q);
+  const $$ = (q, root=document) => [...root.querySelectorAll(q)];
+  const els = {
+    algorithm:$('#algorithm'), limit:$('#limit'), window:$('#window'), rate:$('#rate'), burst:$('#burst'),
+    limitOut:$('#limitOut'), windowOut:$('#windowOut'), rateOut:$('#rateOut'), burstOut:$('#burstOut'),
+    rateControl:$('#rateControl'), burstControl:$('#burstControl'), tip:$('#algorithmTip'),
+    sent:$('#sent'), allowed:$('#allowed'), blocked:$('#blocked'), current:$('#current'),
+    stateText:$('#stateText'), events:$('#events'), canvas:$('#traffic')
+  };
+  const ctx = els.canvas.getContext('2d');
+  const colors={bg:'#080f1c',panel:'#111c31',line:'#263653',text:'#e9f0fc',muted:'#91a2bf',good:'#36d69a',bad:'#ff7478',warn:'#ffc332',info:'#62a6ff',purple:'#ac8bff'};
+  let state, particles=[], decisions=[], autoTimer=null, raf, lastFrame=performance.now();
+  let totals={sent:0,allowed:0,blocked:0};
+
+  const config=()=>({
+    type:els.algorithm.value,
+    limit:+els.limit.value,
+    windowMs:+els.window.value*1000,
+    rate:+els.rate.value,
+    burst:+els.burst.value
+  });
+
+  const tips={
+    fixed:'One integer per key. Very cheap. Watch the yellow boundary reset the whole budget—even if the last burst was one millisecond ago.',
+    sliding:'Every accepted request leaves a timestamp. Exact fairness, but memory grows with the number of requests in the window.',
+    token:'Tokens refill continuously. Each allowed request spends one; a full bucket absorbs a short burst.',
+    gcra:'One timestamp predicts the next legal arrival. It behaves like a smooth token bucket while storing a single number per key.'
+  };
+
+  function reset(){
+    const c=config(), now=performance.now();
+    state={windowStart:now-(now%c.windowMs),count:0,log:[],tokens:c.limit,last:now,tat:now};
+    particles=[];decisions=[];totals={sent:0,allowed:0,blocked:0};
+    updateControls();updateUI(now);draw(now);
+    els.events.innerHTML='Waiting for traffic…';
+  }
+
+  function updateControls(){
+    const c=config();
+    els.limitOut.textContent=c.limit;
+    els.windowOut.textContent=(c.windowMs/1000).toFixed(1)+'s';
+    els.rateOut.textContent=c.rate.toFixed(1)+'/sec';
+    els.burstOut.textContent=c.burst;
+    els.rateControl.style.display=c.type==='token'?'block':'none';
+    els.burstControl.style.display=c.type==='gcra'?'block':'none';
+    els.tip.textContent=tips[c.type];
+  }
+
+  function decide(now){
+    const c=config();
+    if(c.type==='fixed'){
+      const start=Math.floor(now/c.windowMs)*c.windowMs;
+      if(start!==state.windowStart){state.windowStart=start;state.count=0}
+      state.count++;
+      return {allowed:state.count<=c.limit,remaining:Math.max(0,c.limit-state.count),label:state.count+'/'+c.limit};
+    }
+    if(c.type==='sliding'){
+      state.log=state.log.filter(t=>t>now-c.windowMs);
+      const allowed=state.log.length<c.limit;
+      if(allowed)state.log.push(now);
+      return {allowed,remaining:Math.max(0,c.limit-state.log.length),label:state.log.length+' stamps'};
+    }
+    if(c.type==='token'){
+      state.tokens=Math.min(c.limit,state.tokens+Math.max(0,now-state.last)/1000*c.rate);state.last=now;
+      const allowed=state.tokens>=1;if(allowed)state.tokens-=1;
+      return {allowed,remaining:state.tokens,label:state.tokens.toFixed(1)+' tokens'};
+    }
+    const interval=c.windowMs/c.limit, tolerance=interval*c.burst;
+    state.tat=Math.max(state.tat,now);
+    const next=state.tat+interval, allowAt=next-tolerance, allowed=now>=allowAt;
+    if(allowed)state.tat=next;
+    return {allowed,remaining:Math.max(0,Math.floor((now-(state.tat-tolerance))/interval)),label:Math.max(0,state.tat-now).toFixed(0)+'ms ahead'};
+  }
+
+  function recordDecision(r, now){
+    totals[r.allowed?'allowed':'blocked']++;
+    decisions.push({t:now,allowed:r.allowed,label:r.label});
+    decisions=decisions.slice(-45);
+    const line=document.createElement('div');line.className=r.allowed?'allow':'block';
+    line.textContent=`${r.allowed?'200 allow':'429 block'}  ·  ${r.label}`;
+    if(els.events.textContent==='Waiting for traffic…')els.events.innerHTML='';
+    els.events.prepend(line);while(els.events.children.length>7)els.events.lastChild.remove();
+  }
+
+  function send(n=1){
+    // Every member of a burst is decided at the same captured arrival time.
+    // Animation is display-only and cannot change an already-made decision.
+    const now=performance.now();
+    for(let i=0;i<n;i++){
+      const r=decide(now);
+      totals.sent++;
+      recordDecision(r,now);
+      particles.push({born:now,x:72,y:150+(Math.random()-.5)*80,phase:'in',result:r.allowed});
+    }
+    updateUI(now);
+  }
+
+  function revealDecision(p,now){
+    p.phase=p.result?'out':'drop';p.decided=now;
+  }
+
+  function updateUI(now){
+    const c=config();
+    if(c.type==='token'){
+      state.tokens=Math.min(c.limit,state.tokens+Math.max(0,now-state.last)/1000*c.rate);state.last=now;
+    }
+    if(c.type==='sliding')state.log=state.log.filter(t=>t>now-c.windowMs);
+    els.sent.textContent=totals.sent;els.allowed.textContent=totals.allowed;els.blocked.textContent=totals.blocked;
+    let current='',text='';
+    if(c.type==='fixed'){
+      const start=Math.floor(now/c.windowMs)*c.windowMs;if(start!==state.windowStart){state.windowStart=start;state.count=0}
+      current=state.count; text=`count: ${state.count}\nreset in: ${((state.windowStart+c.windowMs-now)/1000).toFixed(1)}s\nstored: 1 integer`;
+    }else if(c.type==='sliding'){
+      current=state.log.length;text=`timestamps: ${state.log.length}\noldest age: ${state.log.length?((now-state.log[0])/1000).toFixed(1)+'s':'—'}\nstored: O(requests)`;
+    }else if(c.type==='token'){
+      current=state.tokens.toFixed(1);text=`tokens: ${state.tokens.toFixed(2)}\nlast refill: now\nstored: 2 numbers`;
+    }else{
+      current=Math.max(0,state.tat-now).toFixed(0)+'ms';text=`TAT: now + ${Math.max(0,state.tat-now).toFixed(0)}ms\nemission: ${(c.windowMs/c.limit).toFixed(0)}ms\nstored: 1 timestamp`;
+    }
+    els.current.textContent=current;els.stateText.textContent=text;
+  }
+
+  function resize(){
+    const r=els.canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);
+    els.canvas.width=Math.round(r.width*dpr);els.canvas.height=Math.round(r.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function rr(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.5;ctx.stroke()}}
+  function label(text,x,y,size=14,color=colors.text,align='center',weight=600){ctx.font=`${weight} ${size}px Segoe UI,system-ui`;ctx.fillStyle=color;ctx.textAlign=align;ctx.fillText(text,x,y)}
+
+  function draw(now){
+    const w=els.canvas.clientWidth,h=els.canvas.clientHeight,c=config();ctx.clearRect(0,0,w,h);ctx.fillStyle=colors.bg;ctx.fillRect(0,0,w,h);
+    const clientX=68,gateX=w*.5,apiX=w-68,midY=148;
+    ctx.setLineDash([5,7]);ctx.strokeStyle=colors.line;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(clientX+55,midY);ctx.lineTo(apiX-55,midY);ctx.stroke();ctx.setLineDash([]);
+    rr(clientX-55,midY-42,110,84,11,colors.panel,colors.line);label('CLIENT',clientX,midY-5,15,colors.info);label('requests',clientX,midY+20,12,colors.muted);
+    rr(gateX-66,midY-50,132,100,12,colors.panel,c.type==='fixed'?colors.warn:c.type==='gcra'?colors.purple:colors.good);label('LIMITER',gateX,midY-10,16,colors.text);label(c.type.toUpperCase(),gateX,midY+18,11,colors.muted);
+    rr(apiX-55,midY-42,110,84,11,colors.panel,colors.good);label('API',apiX,midY-5,15,colors.good);label('work',apiX,midY+20,12,colors.muted);
+
+    if(c.type==='fixed'){
+      const remain=(state.windowStart+c.windowMs-now)/c.windowMs, bx=150+(1-remain)*(w-300);
+      ctx.strokeStyle=colors.warn;ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(bx,232);ctx.lineTo(bx,300);ctx.stroke();ctx.setLineDash([]);label('window reset',bx,320,11,colors.warn);
+    }else if(c.type==='token'){
+      const bw=Math.min(380,w*.48),x=w/2-bw/2,y=255;rr(x,y,bw,26,8,'#09131f',colors.line);
+      const fill=Math.max(0,Math.min(1,state.tokens/c.limit));if(fill>0)rr(x+2,y+2,(bw-4)*fill,22,6,colors.good);
+      label(`${state.tokens.toFixed(1)} / ${c.limit} tokens`,w/2,y+19,12,fill>.45?'#062018':colors.text);
+    }else if(c.type==='sliding'){
+      const x0=150,x1=w-150,y=270;ctx.strokeStyle=colors.line;ctx.beginPath();ctx.moveTo(x0,y);ctx.lineTo(x1,y);ctx.stroke();
+      for(const t of state.log){const x=x1-((now-t)/c.windowMs)*(x1-x0);ctx.fillStyle=colors.info;ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill()}
+      label('trailing window → now',x1,y+28,11,colors.muted,'right');
+    }else{
+      const ahead=Math.max(0,state.tat-now),max=(c.windowMs/c.limit)*c.burst,x=w/2,y=270;rr(x-190,y-13,380,26,8,'#09131f',colors.line);const fill=Math.min(1,ahead/max);if(fill)rr(x-188,y-11,376*fill,22,6,colors.purple);label(`virtual schedule: ${ahead.toFixed(0)}ms ahead`,x,y+5,12,colors.text);
+    }
+
+    particles=particles.filter(p=>now-p.born<1700);
+    for(const p of particles){const age=now-p.born;if(age<0)continue;if(p.phase==='in'){
+      const q=Math.min(1,age/420);p.x=clientX+55+(gateX-clientX-121)*q;if(q>=1)revealDecision(p,now);
+    }else if(p.phase==='out')p.x=gateX+66+(apiX-gateX-121)*Math.min(1,(now-p.decided)/420);
+    else{const q=Math.min(1,(now-p.decided)/550);p.x=gateX+66+100*q;p.y=midY+120*q*q}
+      ctx.fillStyle=p.phase==='in'?colors.info:p.result?colors.good:colors.bad;ctx.beginPath();ctx.arc(p.x,p.y,7,0,Math.PI*2);ctx.fill();
+    }
+    updateUI(now);
+  }
+
+  function loop(now){draw(now);lastFrame=now;raf=requestAnimationFrame(loop)}
+  [els.algorithm,els.limit,els.window,els.rate,els.burst].forEach(e=>e.addEventListener('input',reset));
+  $('#sendOne').onclick=()=>send(1);$('#sendBurst').onclick=()=>send(10);$('#reset').onclick=reset;
+  $('#auto').onclick=()=>{if(autoTimer){clearInterval(autoTimer);autoTimer=null;$('#auto').textContent='Start 4/sec'}else{autoTimer=setInterval(()=>send(1),250);$('#auto').textContent='Stop traffic'}};
+  addEventListener('resize',()=>{resize();draw(performance.now())});resize();reset();raf=requestAnimationFrame(loop);
+
+  // ------------------------------------------------------------ prediction
+  $$('.choice').forEach(b=>b.onclick=()=>{
+    $$('.choice').forEach(x=>x.classList.remove('correct','wrong'));
+    b.classList.add(b.dataset.answer==='correct'?'correct':'wrong');$('#predictReveal').classList.add('show');
+  });
+
+  // ------------------------------------------------------------- scenarios
+  const cases={
+    bot:{layer:'edge',title:'Start at the edge, then add endpoint rules',html:'<strong>Edge / WAF first.</strong> Absorb the volume before it consumes your connections. Add a strict per-account or per-device rule on <code>/login</code>; IP alone is weak when the source is distributed.'},
+    slow:{layer:'concurrency',title:'Rate is the wrong dimension',html:'<strong>Concurrency limit.</strong> Twenty requests over a minute sounds harmless, but twenty 30-second jobs hold twenty workers together. Cap requests in flight and queue only what users can reasonably wait for.'},
+    graphql:{layer:'cost',title:'One request can still be enormous',html:'<strong>Cost-based limit.</strong> Calculate query complexity before execution and spend that many units. Shopify uses this model for GraphQL; counting the call itself would price a health check and a huge graph walk equally.'},
+    incident:{layer:'adaptive',title:'The safe number just changed',html:'<strong>Adaptive concurrency, then load shedding.</strong> Watch latency for queueing, shrink concurrency before failures cascade, and shed low-priority traffic if the whole fleet remains saturated.'}
+  };
+  $$('.scenario-choice').forEach(b=>b.onclick=()=>{
+    const c=cases[b.dataset.case];$$('.layer').forEach(l=>l.classList.toggle('active',l.dataset.layer===c.layer));
+    $('#scenarioTitle').textContent=c.title;$('#scenarioAnswer').innerHTML=c.html;
+  });
+
+  // ------------------------------------------------------------------ code
+  const snippets={
+fixed:{file:'fixed-window.js',code:`function fixedWindow(key, limit = 100, windowMs = 60_000) {
+  const window = Math.floor(Date.now() / windowMs);
+  const entry = state.get(key);
+
+  if (!entry || entry.window !== window) {
+    state.set(key, { window, count: 1 });
+    return { allowed: true, remaining: limit - 1 };
+  }
+
+  entry.count += 1;
+  return {
+    allowed: entry.count <= limit,
+    remaining: Math.max(0, limit - entry.count),
+  };
+}`},
+sliding:{file:'sliding-window-log.js',code:`function slidingWindow(key, limit = 100, windowMs = 60_000) {
+  const now = Date.now();
+  const cutoff = now - windowMs;
+  const log = (state.get(key) ?? []).filter(t => t > cutoff);
+
+  if (log.length >= limit) {
+    state.set(key, log);
+    return { allowed: false, retryAfterMs: log[0] - cutoff };
+  }
+
+  log.push(now);
+  state.set(key, log);
+  return { allowed: true, remaining: limit - log.length };
+}`},
+token:{file:'token-bucket.js',code:`function takeToken(key, capacity = 10, refillPerSec = 2) {
+  const now = Date.now();
+  const b = state.get(key) ?? { tokens: capacity, last: now };
+
+  // Lazy refill: no timer is necessary.
+  const effectiveNow = Math.max(now, b.last);
+  const elapsedSec = (effectiveNow - b.last) / 1000;
+  b.tokens = Math.min(capacity, b.tokens + elapsedSec * refillPerSec);
+  b.last = effectiveNow;
+
+  const allowed = b.tokens >= 1;
+  if (allowed) b.tokens -= 1;
+  state.set(key, b);
+
+  return {
+    allowed,
+    retryAfterMs: allowed ? 0 : Math.ceil((1 - b.tokens) / refillPerSec * 1000),
+  };
+}`},
+gcra:{file:'gcra.js',code:`function gcra(key, limit = 10, periodMs = 1000, burst = 5) {
+  const now = Date.now();
+  const interval = periodMs / limit;
+  const tolerance = interval * burst;
+  const tat = Math.max(state.get(key) ?? now, now);
+  const next = tat + interval;
+  const allowAt = next - tolerance;
+
+  if (now < allowAt) {
+    return { allowed: false, retryAfterMs: allowAt - now };
+  }
+
+  state.set(key, next); // one timestamp per key
+  return { allowed: true, retryAfterMs: 0 };
+}`}}
+  function showCode(k){$$('.code-tab').forEach(t=>t.classList.toggle('active',t.dataset.code===k));$('#codeFile').textContent=snippets[k].file;$('#codeText').textContent=snippets[k].code}
+  $$('.code-tab').forEach(t=>t.onclick=()=>showCode(t.dataset.code));showCode('fixed');
+  $('#copyCode').onclick=async()=>{await navigator.clipboard.writeText($('#codeText').textContent);$('#copyCode').textContent='Copied';setTimeout(()=>$('#copyCode').textContent='Copy code',1200)};
+
+  // ------------------------------------------------------------------ quiz
+  const questions=[
+    {q:'You add a second Node process. What happens to an in-memory limit of 100/min?',a:1,o:['Nothing; the load balancer shares memory','It effectively becomes 200/min','It becomes 50/min','Node automatically syncs the Maps'],why:'Each process owns a different Map, so each grants its own 100.'},
+    {q:'Why put the entire Redis decision in Lua?',a:2,o:['Lua is faster than JavaScript','It compresses the counter','Read, decide, and write become atomic','Redis cannot increment without Lua'],why:'Multiple atomic commands do not make an atomic workflow. The script prevents interleaving.'},
+    {q:'Two requests/sec take 30 seconds each. Which limit sees the real danger?',a:0,o:['Concurrency limit','Fixed window','Monthly quota','IP limit'],why:'The problem is work held at the same time, not arrival rate.'},
+    {q:'Where should durable monthly billable usage live?',a:3,o:['An in-process Map','Only Redis with eviction enabled','A browser cookie','A database ledger, with Redis as the hot cache'],why:'A Redis restart must not reset what a customer consumed or owes.'},
+    {q:'An upstream returns 429 with Retry-After: 12. What should your client do?',a:1,o:['Retry immediately 12 times','Wait at least 12 seconds, add later jitter, and stay inside a bounded replay-safe retry policy','Switch to 503','Open 12 parallel connections'],why:'Treat the server’s recovery time as a floor, spread later with jitter, and retry only within a bounded replay-safe policy.'}
+  ];
+  let quizAnswers=Array(questions.length).fill(null);
+  const ql=$('#quizList');questions.forEach((q,qi)=>{const el=document.createElement('article');el.className='card question';el.innerHTML=`<h3>${qi+1}. ${q.q}</h3><div class="options">${q.o.map((o,oi)=>`<button data-i="${oi}">${o}</button>`).join('')}</div><p class="reveal">${q.why}</p>`;ql.append(el);$$('button',el).forEach(b=>b.onclick=()=>{if(quizAnswers[qi]!==null)return;const i=+b.dataset.i;quizAnswers[qi]=i;b.classList.add(i===q.a?'correct':'wrong');$$('button',el)[q.a].classList.add('correct');$('.reveal',el).classList.add('show');if(quizAnswers.every(x=>x!==null)){const score=quizAnswers.filter((x,i)=>x===questions[i].a).length,result=$('#quizResult');result.classList.add('show');result.innerHTML=score===5?`<strong style="color:var(--good)">5/5 — ship it.</strong> You are thinking in dimensions, not just counters.`:`<strong style="color:var(--warn)">${score}/5.</strong> Replay the highlighted scenes, then try again by refreshing the page.`}})});
+
+  // Headless smoke mode proves decisions happen synchronously at arrival time.
+  if(new URLSearchParams(location.search).has('selftest')){
+    els.algorithm.value='token';els.limit.value='10';els.rate.value='2';reset();send(12);
+    if(totals.allowed!==10||totals.blocked!==2)throw new Error(`token burst failed: ${JSON.stringify(totals)}`);
+    els.algorithm.value='fixed';els.limit.value='2';els.window.value='2';reset();
+    const a=decide(5999),b=decide(5999),c=decide(6000);
+    if(!a.allowed||!b.allowed||!c.allowed)throw new Error('fixed boundary self-test failed');
+    document.documentElement.dataset.selftest='passed';
+    els.algorithm.value='token';els.limit.value='10';els.window.value='5';els.rate.value='2';reset();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "name": "rate-limiting-article",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Verified code, visuals, videos, and an interactive lab for a rate-limiting masterclass.",
+  "type": "module",
+  "scripts": {
+    "test": "node tools/test-phase1.mjs && node tools/test-phase2.mjs && node tools/test-phase3.mjs && node tools/test-phase4.mjs && node tools/verify-snippets.mjs && node tools/validate-package.mjs",
+    "validate": "node tools/validate-package.mjs",
+    "build:images": "node tools/build.mjs",
+    "build:animations": "node tools/d03gif.mjs && node tools/d07gif.mjs"
+  },
+  "keywords": [
+    "rate-limiting",
+    "redis",
+    "nodejs",
+    "system-design"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "express": "5.2.1",
+    "express-rate-limit": "8.7.1",
+    "fengari": "0.1.5",
+    "gifenc": "1.0.3",
+    "rate-limit-redis": "6.0.1",
+    "sharp": "0.35.5"
+  }
+}
